@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <History>True|2022-05-17T08:42:11.1196895Z;True|2022-05-16T14:28:17.9652532+07:00;True|2022-05-16T11:12:02.5211616+07:00;True|2022-05-16T10:21:41.3947748+07:00;True|2022-05-13T15:33:44.6977271+07:00;True|2022-05-13T14:58:50.5992918+07:00;True|2022-05-13T14:43:34.4803933+07:00;False|2022-05-13T14:40:02.8299165+07:00;</History>
+    <_PublishTargetUrl>\\vnhcmm0teapp05\wwwroot\JTSMS\JTSMS</_PublishTargetUrl>
+  </PropertyGroup>
+</Project>

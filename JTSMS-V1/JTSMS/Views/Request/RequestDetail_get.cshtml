@@ -1,0 +1,131 @@
+﻿@model List<SharedObjects.ValueObjects.VDetail>;
+
+@{
+    var customers = ViewData["Customer"] as IEnumerable<SharedObjects.ValueObjects.VCustomer>;
+    var Station = ViewData["Station"] as IEnumerable<SharedObjects.ValueObjects.VStation>;
+    var Type = ViewData["Type"] as IEnumerable<SharedObjects.ValueObjects.VType>;
+}
+<table class="table table-bordered table-hover table-striped table-responsive">
+    <thead>
+        <tr class="text-center bold">
+            <th>No.</th>
+            <th>Customer</th>
+            <th>Station</th>
+            <th>RouteStep</th>
+            <th>Assembly Number</th>
+            <th>Assembly Revision</th>
+            <th>Type</th>
+            <th>Platform</th>
+            <th>Test Script Id</th>
+            @*<th>ScriptName</th>
+            <th>ScriptRev</th>
+            <th>FileHash</th>
+            <th>Firmware</th>
+            <th>Firmware Revision</th>*@
+            <th>Description</th>
+            <th>Status</th>
+            <th>Modification</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="text-center">
+            <td>New</td>
+            <td>
+                <select class="form-control" id="txt-customer" required>
+                    <option value="">Please Select</option>
+                    @foreach (var item in customers.OrderByDescending(c => c.CustId).ToList())
+                    {
+                        <option value=@item.CustId>@item.CustName</option>
+                    }
+                </select>
+            </td>
+            <td>
+                <select class="form-control" id="txt-station" style="height: 34px !important; color: mediumvioletred">
+                    <option value="">Please Select</option>
+                    @foreach (var item in Station.OrderByDescending(c => c.Station).ToList())
+                    {
+                        <option value=@item.StepId>@item.Station</option>
+                    }
+                </select>
+            </td>
+            <td>
+                <select class="form-control" id="txt-route" style="height: 34px !important; color: mediumvioletred">
+                    <option value="">Please Select</option>
+                    <option value=1>Route 1</option>
+                    <option value=2>Route 2</option>
+                    @*@foreach (var item in Station.OrderByDescending(c => c.Station).ToList())
+                    {
+                    <option value=@item.StepId>@item.Station</option>
+                    }*@
+                </select>
+               @* <input id="txt-route" type="text" class="form-control" style="height:30px" />*@
+            </td>
+            <td>
+                <input id="txt-assy" type="text" class="form-control" style="height:30px" />
+            </td>
+            <td>
+                <input id="txt-rev" type="text" class="form-control" style="height:30px" />
+            </td>
+            <td>
+                <select class="form-control" id="txt-type" data-search="type" name="type" style="color:mediumvioletred">
+                    <option value=0>--Please Select--</option>
+                    @foreach (var item in Type.OrderByDescending(c => c.TypeId).ToList())
+                    {
+                        <option value=@item.TypeId>@item.Type</option>
+                    }
+                
+                </select>
+            </td>
+            <td>
+                <select class="form-control" id="txt-platform" data-search="type" name="type" style="color:mediumvioletred">
+                    <option value=0>--Please Select--</option>
+                    <option value=1>JEMSts </option>
+                    <option value=2>Jabil Test</option>
+                </select>
+            </td>
+            @*<td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>*@
+            <td></td>
+
+            <td>
+                <input id="txt-description" type="text" class="form-control" style="height:30px" />
+            </td>
+            <td></td>
+            <td class="text-center">
+                <a id="btn-add" class="btn default btn-xs purple update" title="Get Test Script ID"> <span class="glyphicon glyphicon-plus"></span></a>
+            </td>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ReqId</td>
+                <td>@item.CustName</td>
+                <td>@item.Station</td>
+                <td>@item.routeStepId</td>
+                <td>@item.AssemblyNumber</td>
+                <td>@item.AssemblyRevision</td>
+                <td>@item.Type</td>
+                <td>@item.Platform</td>
+                <td>@item.ScriptId</td>
+                @*<td>@item.ScriptName</td>
+                <td>@item.ScriptRev</td>
+                <td>@item.FileHash</td>
+                <td>@item.Firmware</td>
+                <td>@item.FirmwareRevision</td>*@
+
+                <td>@item.Description</td>
+                <td style="background-color:@item.StatusColour">@item.StatusName</td>
+                <td class="text-center">
+
+                    <a id="btn-edit" class="btn default btn-xs purple" data-reqId="@item.ReqId" target="_blank" href="@Url.Action("RequestDetail_get_by_id","Request", new { reqid = item.ReqId})" title="Edit"> <span class="glyphicon glyphicon-list-alt"></span></a>
+                    <a id="btn-delete" class="btn default btn-xs purple" data-reqId="@item.ReqId" title="Remove"> <span class="glyphicon glyphicon-remove"></span></a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

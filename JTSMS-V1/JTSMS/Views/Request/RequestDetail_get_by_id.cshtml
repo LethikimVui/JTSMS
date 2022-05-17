@@ -1,0 +1,268 @@
+﻿@model SharedObjects.ValueObjects.VDetail
+@using SharedObjects.ValueObjects;
+@using SharedObjects.Extensions;
+
+@{
+    ViewData["Title"] = "Submission";
+    var Approval_get = ViewData["Approval_get"] as IEnumerable<SharedObjects.ValueObjects.VApproval>;
+    var Approval_get_current = ViewData["Approval_get_current"] as IEnumerable<SharedObjects.ValueObjects.VApproval>;
+}
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-md-12" style="min-height: auto !important;height: auto !important;">
+
+            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+            <div class="portlet light" style="min-height: auto !important;height: auto !important">
+                <div class="portlet-title">
+
+                    <div class="caption col-md-12">
+                        <span class="caption-subject font-green-sharp bold uppercase">
+                            Submit for approval
+                        </span>
+                    </div>
+                    <div class="form-group col-md-2 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">Customer</label>
+                        <input class="form-control" value="@Model.CustName" readonly />
+
+                    </div>
+                    <div class="form-group col-md-2 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">Station</label>
+                        <input class="form-control" value="@Model.Station" readonly />
+
+                    </div>
+                    <div class="form-group col-md-2 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">Assembly Number</label>
+                        <input class="form-control" value="@Model.AssemblyNumber" readonly />
+
+                    </div>
+                    <div class="form-group col-md-2 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">Assembly Revision	</label>
+                        <input class="form-control" value="@Model.AssemblyRevision" readonly />
+
+                    </div>
+                    <div class="form-group col-md-2 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">Type</label>
+                        <input class="form-control" value="@Model.Type" readonly />
+                    </div>
+                    <div class="form-group col-md-2 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">Platform</label>
+                        <input class="form-control" value="@Model.Platform" readonly />
+
+                    </div>
+                    <div class="form-group col-md-4 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">Test Script Id</label>
+                        <input class="form-control" id="txt-scriptid" value="@Model.ScriptId" readonly />
+
+                    </div>
+                    <div class="form-group col-md-2 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">CreationDate</label>
+                        <input class="form-control" value="@Model.creationDate" readonly />
+                    </div>
+                    <div class="form-group col-md-2 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">CreatedBy</label>
+                        <input class="form-control" value="@Model.CreatedName" readonly />
+                    </div>
+                    <div class="form-group col-md-2 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">Status</label>
+                        <input class="form-control" value="@Model.StatusName" style="background-color: @Model.StatusColour" readonly />
+                    </div>
+                    @if (Model.StatusId == 1)
+                    {
+                        <div class="form-group col-md-2 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">ScriptName</label>
+                            <input id="txt-scriptname" type="text" class="form-control" value="@Model.ScriptName" />
+                        </div>
+                        <div class="form-group col-md-2 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">ScriptRev</label>
+                            <input id="txt-scriptrev" type="text" class="form-control" value="@Model.ScriptRev" />
+                        </div>
+                        <div class="form-group col-md-2 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">Firmware</label>
+                            <input id="txt-firmware" type="text" class="form-control" value="@Model.Firmware" />
+                        </div>
+                        <div class="form-group col-md-2 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">Firmware Revision</label>
+                            <input id="txt-firmwarerev" type="text" class="form-control" value="@Model.FirmwareRevision" />
+                        </div>
+                        <div class="form-group col-md-4 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">Description</label>
+                            <input id="txt-description" type="text" class="form-control" value="@Model.Description" />
+                        </div>
+                        <div class="form-group col-md-4 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">OriginalScript</label>
+                            <input id="txt-script" type="file" class="form-control" />
+                        </div>
+                        <div class="form-group col-md-4 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">Encrypted</label>
+                            <input id="txt-encripted" type="file" class="form-control" />
+                        </div>
+                        <div class="form-group col-md-12">
+                            <a class="btn btn-success" id="btn-submit" data-reid="@Model.ReqId" data-typeid="@Model.TypeId">Submit</a>
+                        </div>
+                        @*<div class="form-group col-md-1">
+                                <a class="btn btn-success" id="btn-test">Test</a>
+                            </div>*@
+                    }
+                    else
+                    {
+                        <div class="form-group col-md-2 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">ScriptName</label>
+                            <input class="form-control" value="@Model.ScriptName" readonly />
+
+                        </div>
+                        <div class="form-group col-md-2 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">ScriptRev</label>
+                            <input class="form-control" value="@Model.ScriptRev" readonly />
+
+                        </div>
+                        <div class="form-group col-md-2 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">Firmware</label>
+                            <input class="form-control" value="@Model.Firmware" readonly />
+
+                        </div>
+                        <div class="form-group col-md-2 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">Firmware Revision</label>
+                            <input class="form-control" value="@Model.FirmwareRevision" readonly />
+
+                        </div>
+
+                        <div class="form-group col-md-4 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">FileHash</label>
+                            <input class="form-control" value="@Model.FileHash" readonly />
+
+                        </div>
+                        <div class="form-group col-md-4 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">ScriptFileName</label>
+                            <a class="wrapper" href="@Url.Action("DownloadFile", "Request", new { fileName = @Model.ScriptFileName })">@Model.ScriptFileName</a>
+                        </div>
+                        <div class="form-group col-md-4 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">EncryptedFileName</label>
+
+                            <a class="wrapper" href="@Url.Action("DownloadFile", "Request", new { fileName = @Model.EncriptedFileName })">@Model.EncriptedFileName</a>
+                        </div>
+                        <div class="form-group col-md-4 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">Description</label>
+                            <input class="form-control" value="@Model.Description" readonly />
+                        </div>
+                        @if (Approval_get_current.Where(s => s.NTLogin == User.GetSpecificClaim("Ntlogin")).Any())
+                        {
+                            <div class="form-group col-md-12 pull-left">
+                                <label class="text-center bold font-green-sharp" for="">Remark</label>
+                                <input class="form-control" id="txt-remark" />
+                            </div>
+                        }
+                        <table class="table table-bordered table-hover table-striped table-responsive">
+                            <thead>
+                                <tr class="text-center bold">
+                                    <th>RouteName</th>
+                                    <th>Name</th>
+                                    @*<th>Email</th>*@
+                                    <th>Status</th>
+                                    <th>UpdateDate</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Approval_get.GroupBy(u => u.RouteName)  // group by RouteName
+                                         .Select(g => new VApproval   // select values
+                                                      {
+                                             RouteName = g.First().RouteName,
+                                             IsClosed = g.First().IsClosed,
+                                             UpdateDate = g.First().UpdateDate,
+                                             UpdatedName = g.First().UpdatedName,
+                                             Remarks = g.First().Remarks,
+                                             Name = string.Join(", ", g.Select(u => u.Name)),
+                                             Email = string.Join(", ", g.Select(u => u.Email))
+                                         })
+                                         .ToList())
+                                {
+                                    <tr>
+                                        <td>@item.RouteName</td>
+                                        @{
+                                            string b = item.IsClosed == 1 ? item.UpdatedName : item.Name;
+                                            <td>
+                                                @b
+                                            </td>
+                                        }
+                                        @{
+                                            string a = item.IsClosed == 1 ? "Closed" : "Pending Approval";
+                                            <td>
+                                                @a
+                                            </td>
+                                        }
+                                        <td>@item.UpdateDate</td>
+                                        <td>@item.Remarks</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        @if (Approval_get_current.Where(s => s.NTLogin == User.GetSpecificClaim("Ntlogin")).Any())
+                        {
+                            <div class="form-group col-md-1">
+                                <a class="btn btn-success" id="btn-approve" data-reqid="@Model.ReqId" data-routeid="@Approval_get_current.FirstOrDefault().RouteId">Approve</a>
+                            </div>
+
+                            <div class="form-group col-md-1">
+                                <a class="btn btn-success" id="btn-reject" data-reqid="@Model.ReqId" data-routeid="@Approval_get_current.FirstOrDefault().RouteId">Reject</a>
+                            </div>
+                        }
+                        if (Model.StatusId == 4 && Model.TypeId == 2)
+                        {
+
+                            <div class="form-group col-md-1">
+                                <a class="btn btn-success" id="btn-close" data-reqid="@Model.ReqId">Close Deviation</a>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script src="~/js/request.js"></script>
+    <script>
+        document.getElementById('txt-encripted').addEventListener('change', Encripted)
+        function Encripted() {
+            var reader = new FileReader(); // define a Reader
+            var file = $('#txt-encripted')[0].files[0]; // get the File obect
+            if (!file) {
+                alert('no encripted file selected');
+                return
+            } // check if user selected a file
+            reader.onload = function (f) {
+                var file_result = this.result; // this == reader, get the loaded file "result"
+                var file_wordArr = CryptoJS.lib.WordArray.create(file_result); //convert blob to WordArray , see https://code.google.com/p/crypto-js/issues/detail?id=67
+                var sha1_hash = CryptoJS.SHA1(file_wordArr); //calculate SHA1 hash
+                var sha1_hash1 = sha1_hash.toString()
+                //alert("Calculated SHA1:" + sha1_hash.toString()); //output result
+                $('#txt-encripted').attr('data-hash-encripted', sha1_hash1)
+            };
+            reader.readAsArrayBuffer(file); // read the file as ArrayBuffer
+        }
+        document.getElementById('txt-script').addEventListener('change', Script)
+
+        function Script() {
+            var reader = new FileReader(); // define a Reader
+            var file = $('#txt-script')[0].files[0]; // get the File obect
+            if (!file) {
+                alert('no encripted file selected');
+                return
+            } // check if user selected a file
+            reader.onload = function (f) {
+                var file_result = this.result; // this == reader, get the loaded file "result"
+                var file_wordArr = CryptoJS.lib.WordArray.create(file_result); //convert blob to WordArray , see https://code.google.com/p/crypto-js/issues/detail?id=67
+                var sha1_hash = CryptoJS.SHA1(file_wordArr); //calculate SHA1 hash
+                var sha1_hash1 = sha1_hash.toString()
+                //alert("Calculated SHA1:" + sha1_hash.toString()); //output result
+                $('#txt-script').attr('data-hash-script', sha1_hash1)
+            };
+            reader.readAsArrayBuffer(file); // read the file as ArrayBuffer
+        }
+    </script>
+}
