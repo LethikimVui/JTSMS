@@ -18,13 +18,14 @@ namespace API.Models
 
         }
 
-        //Scaffold-DbContext "Data Source=vnhcmm0teapp03;Initial Catalog=jtestsms;User Id=hcm_vui_usr;Password=hcm_vui_usr;" MySql.Data.EntityFrameworkCore -Tables "RequestDetail" -OutputDir Models2
+        //Scaffold-DbContext "Data Source=vnhcmm0teapp03;Initial Catalog=jtestsms;User Id=hcm_vui_usr;Password=hcm_vui_usr;" MySql.Data.EntityFrameworkCore -Tables "Master_Approval" -OutputDir Models2
 
 
         public virtual DbSet<ScriptDetails> ScriptDetails { get; set; }
         public virtual DbSet<MasterApproval> MasterApproval { get; set; }
         public virtual DbSet<Requestdetail> Requestdetail { get; set; }
         public virtual DbSet<AccessUserRole> AccessUserRole { get; set; }
+        public virtual DbSet<Watchdogconfig> Watchdogconfig { get; set; }
 
 
         public virtual DbQuery<VCustomer> VCustomer { get; set; }
@@ -35,6 +36,9 @@ namespace API.Models
         public virtual DbQuery<VApproval> VApproval { get; set; }
         public virtual DbQuery<VUserRole> VUserRole { get; set; }
         public virtual DbQuery<VRole> VRole { get; set; }
+        public virtual DbQuery<VRoute> VRoute { get; set; }
+        public virtual DbQuery<VMasterApproval> VMasterApproval { get; set; }
+        public virtual DbQuery<VConfig> VConfig { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -136,6 +140,10 @@ namespace API.Models
                 entity.Property(e => e.CreatedBy)
                     .HasColumnName("createdBy")
                     .HasMaxLength(45);
+
+                entity.Property(e => e.CustId)
+                    .HasColumnName("custId")
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.Email).HasMaxLength(100);
 
@@ -278,7 +286,6 @@ namespace API.Models
                     .HasColumnName("updatedName")
                     .HasMaxLength(45);
             });
-
             modelBuilder.Entity<AccessUserRole>(entity =>
             {
                 entity.HasKey(e => e.UserRoleId);
@@ -342,6 +349,61 @@ namespace API.Models
                     .HasColumnName("userName")
                     .HasMaxLength(30)
                     .IsUnicode(false);
+            });
+            modelBuilder.Entity<Watchdogconfig>(entity =>
+            {
+                entity.HasKey(e => e.WdconfigId)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("watchdogconfig");
+
+                entity.Property(e => e.WdconfigId)
+                    .HasColumnName("wdconfigId")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.AssyNumber)
+                    .HasColumnName("assyNumber")
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.AssyRev)
+                    .HasColumnName("assyRev")
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.CustId)
+                    .HasColumnName("custId")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.EquipmentId)
+                    .HasColumnName("equipment_id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.IsActive)
+                    .HasColumnName("isActive")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.IsDmz)
+                    .HasColumnName("isDMZ")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.ProcessStep)
+                    .HasColumnName("processStep")
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.RouteStep)
+                    .HasColumnName("routeStep")
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.TestTime)
+                    .HasColumnName("test_time")
+                    .HasColumnType("int(8)");
+
+                entity.Property(e => e.TesterName)
+                    .HasColumnName("testerName")
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.TesterPcName)
+                    .HasColumnName("tester_pc_name")
+                    .HasMaxLength(45);
             });
             OnModelCreatingPartial(modelBuilder);
         }

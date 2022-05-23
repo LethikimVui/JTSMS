@@ -24,6 +24,7 @@ namespace Services.Interfaces
         Task<VDetail> RequestDetail_get_by_id(int reqId);
         Task<List<VApproval>> Approval_get(int reqId);
         Task<List<VApproval>> Approval_get_current(int reqId);
+        Task<List<VUserRole>> Access_UserRole_Get_By_ScriptId(RequestViewModel model);
 
     }
 }

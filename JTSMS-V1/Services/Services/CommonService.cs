@@ -33,6 +33,17 @@ namespace Services.Services
             return customers;
         }
 
+        public async Task<List<VRoute>> Master_Route_get()
+        {
+            List<VRoute> results = new List<VRoute>();
+            using (var response = await httpClient.GetAsync("api/common/Master_Route_get"))
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                results = JsonConvert.DeserializeObject<List<VRoute>>(apiResponse);
+            }
+            return results;
+        }
+
         public async Task<List<VStation>> Station_get()
         {
             List<VStation> results = new List<VStation>();

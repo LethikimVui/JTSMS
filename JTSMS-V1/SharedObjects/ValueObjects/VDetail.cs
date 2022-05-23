@@ -31,6 +31,7 @@ namespace SharedObjects.ValueObjects
         public bool IsActive { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedName { get; set; }
+        public string CreatedEmail { get; set; }
         public DateTime? creationDate { get; set; }
         public string UpdatedBy { get; set; }
         public string Firmware { get; set; }

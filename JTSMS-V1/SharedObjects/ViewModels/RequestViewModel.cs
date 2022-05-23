@@ -37,6 +37,7 @@ namespace SharedObjects.ViewModels
         public string EncriptedFileName { get; set; }
         public string ScriptFileName { get; set; }
         public string Remark { get; set; }
+        public string Action { get; set; }
 
     }
 }

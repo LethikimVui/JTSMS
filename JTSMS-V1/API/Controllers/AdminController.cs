@@ -39,11 +39,12 @@ namespace API.Controllers
             var results = await context.Query<VRole>().AsNoTracking().FromSql(SPAdmin.Access_Role_get).ToListAsync();
             return results;
         }
-        [HttpGet("Access_UserRole_get")]
+        
+        [HttpPost("Access_UserRole_get")]
         [Obsolete]
-        public async Task<List<VUserRole>> Access_UserRole_get()
+        public async Task<List<VUserRole>> Access_UserRole_get(UserRoleViewModel model)
         {
-            var results = await context.Query<VUserRole>().AsNoTracking().FromSql(SPAdmin.Access_UserRole_get).ToListAsync();
+            var results = await context.Query<VUserRole>().AsNoTracking().FromSql(SPAdmin.Access_UserRole_get, model.RoleId, model.CustId, model.Ntlogin).ToListAsync();
             return results;
         }
         [HttpGet("Access_UserRole_Get_By_Id/{id}")]
@@ -82,7 +83,7 @@ namespace API.Controllers
         {
             try
             {
-                await context.Database.ExecuteSqlCommandAsync(SPAdmin.Access_UserRole_delete, model.UserRoleId, model.UpdatedBy);
+                await context.Database.ExecuteSqlCommandAsync(SPAdmin.Access_UserRole_delete, model.UserRoleId, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
                 return Ok(new ResponseResult(200));
             }
             catch (Exception ex)
@@ -96,13 +97,60 @@ namespace API.Controllers
         {
             try
             {
-                await context.Database.ExecuteSqlCommandAsync(SPAdmin.Access_UserRole_update, model.UserRoleId, model.PlantId, model.CustId, model.RoleId, model.UpdatedBy);
+                await context.Database.ExecuteSqlCommandAsync(SPAdmin.Access_UserRole_update, model.UserRoleId, model.PlantId, model.CustId, model.RoleId, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
                 return Ok(new ResponseResult(200, "User Updated Successfully"));
             }
             catch (Exception ex)
             {
                 return BadRequest(new ResponseResult(400, ex.Message));
             }
+        }
+
+
+
+        [HttpGet("Master_Approval_get_by_routeId/{routeId}")]
+        [Obsolete]
+        public async Task<List<VMasterApproval>> Master_Approval_get_by_routeId(int routeId)
+        {
+            var results = await context.Query<VMasterApproval>().AsNoTracking().FromSql(SPAdmin.Master_Approval_get_by_routeId, routeId).ToListAsync();
+            return results;
+        }
+        [HttpPost("Master_Approval_insert")]
+        [Obsolete]
+        public async Task<IActionResult> Master_Approval_insert(UserRoleViewModel model)
+        {
+            try
+            {
+                if (!context.MasterApproval.Where(x => (x.Ntlogin == model.Ntlogin) && (x.CustId == model.CustId) && x.RouteId ==model.RouteId && (x.IsActive == 1)).ToList().Any())
+                {
+                    await context.Database.ExecuteSqlCommandAsync(SPAdmin.Master_Approval_insert, model.CustId, model.RouteId, model.Ntlogin, model.UserName, model.UserEmail, model.CreatedBy);
+                    return Ok(new ResponseResult(200, "User Added Successfully"));
+                }
+                else
+                {
+                    return Conflict(new ResponseResult(400, "User already existing"));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseResult(400, ex.Message));
+            }
+        }
+
+        [HttpPost("Master_Approval_delete")]
+        [Obsolete]
+        public async Task<IActionResult> Master_Approval_delete(UserRoleViewModel model)
+        {
+            try
+            {
+                await context.Database.ExecuteSqlCommandAsync(SPAdmin.Master_Approval_delete, model.ApprovalId, model.UpdatedBy);
+                return Ok(new ResponseResult(200));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseResult(400, ex.Message));
+            }
+
         }
     }
 }

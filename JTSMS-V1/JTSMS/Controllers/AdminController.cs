@@ -21,6 +21,7 @@ using SharedObjects.Extensions;
 
 namespace JTSMS.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         private readonly IAdminService adminService;
@@ -76,16 +77,22 @@ namespace JTSMS.Controllers
             }
             return DisplayName;
         }
-        public async Task<IActionResult> Get()
+       
+        public async Task<IActionResult> Search()
         {
-            var NtLogin = User.GetSpecificClaim("Ntlogin");
-            var userRoles = await adminService.Access_UserRole_get();
+            var roles = await adminService.Access_Role_get();
+            ViewData["Customers"] = await commonService.Customer_Get();
+            ViewData["roles"] = roles;
+            return View();
+        }
+        public async Task<IActionResult> User_Get([FromBody] UserRoleViewModel model)
+        {
+            var userRoles = await adminService.Access_UserRole_get(model);
             var roles = await adminService.Access_Role_get();
             ViewData["Customers"] = await commonService.Customer_Get();
 
-
             ViewData["roles"] = roles;
-            return View(userRoles);
+            return PartialView(userRoles);
         }
         public async Task<IActionResult> Access_UserRole_insert([FromBody] UserRoleViewModel model)
         {
@@ -107,6 +114,33 @@ namespace JTSMS.Controllers
         public async Task<IActionResult> Access_UserRole_Get_By_Id(int id)
         {
             var result = await adminService.Access_UserRole_Get_By_Id(id);
+            return Json(new { results = result });
+        }
+
+
+        public async Task<IActionResult> Approval()
+        {
+            var Routes = await commonService.Master_Route_get();
+            ViewData["Customers"] = await commonService.Customer_Get();
+            ViewData["Routes"] = Routes;
+            return View(Routes);
+        }
+        public async Task<IActionResult> Master_Approval_get_by_routeId(int routeId)
+        {
+            ViewData["Customers"] = await commonService.Customer_Get();
+            var Approval_get_by_routeId = await adminService.Master_Approval_get_by_routeId(routeId);
+            return PartialView(Approval_get_by_routeId);
+        }
+        public async Task<IActionResult> Master_Approval_insert([FromBody] UserRoleViewModel model)
+        {
+            model.UserEmail = EmailAddress(model.Ntlogin);
+            model.UserName = DisplayName(model.Ntlogin);
+            var result = await adminService.Master_Approval_insert(model);
+            return Json(new { results = result });
+        }
+        public async Task<IActionResult> Master_Approval_delete([FromBody] UserRoleViewModel model)
+        {
+            var result = await adminService.Master_Approval_delete(model);
             return Json(new { results = result });
         }
     }

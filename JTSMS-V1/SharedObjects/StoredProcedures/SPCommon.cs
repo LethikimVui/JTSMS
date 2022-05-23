@@ -11,6 +11,7 @@ namespace SharedObjects.StoredProcedures
         public static string Customer_get = "call usp_Customer_get";
         public static string Station_get = "call usp_Station_get";
         public static string Type_get = "call usp_Type_get";
+        public static string Master_Route_get = "call usp_Master_Route_get";
         public static string Access_UserRole_Get_By_ScriptId = "call usp_Access_UserRole_Get_By_ScriptId (@p0)";
     }
 }

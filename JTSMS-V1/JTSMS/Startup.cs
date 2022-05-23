@@ -47,6 +47,7 @@ namespace JTSMS
             services.AddTransient<IRequestService, RequestService>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IAdminService, AdminService>();
+            services.AddTransient<IConfigService, ConfigService>();
 
         }
 

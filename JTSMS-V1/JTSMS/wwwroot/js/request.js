@@ -4,6 +4,7 @@
     $('body').off('click', '#btn-delete').on('click', '#btn-delete', Delete);
     $('body').off('click', '#btn-submit').on('click', '#btn-submit', Submit);
     $('body').off('click', '#btn-approve').on('click', '#btn-approve', Approve);
+
     $('body').off('click', '#btn-reject').on('click', '#btn-reject', Reject);
     $('body').off('click', '#btn-close').on('click', '#btn-close', Close);
 
@@ -17,16 +18,17 @@
 
         var model = new Object();
         model.ReqId = parseInt($(this).attr('data-reqid'));
-        model.ScriptId = $(this).attr('txt-scriptid');
+        model.ScriptId = $('#txt-scriptid').val();
         model.RouteId = parseInt($(this).attr('data-routeid'));
         model.Remark = $('#txt-remark').val();
+        model.Action = "Approve";
         model.UpdatedBy = user
         model.UpdatedName = name
         model.UpdatedEmail = email
 
         $.ajax({
             type: 'post',
-            url: '/request/Request_approve',
+            url: '/request/Request_update',
             data: JSON.stringify(model),
             cache: false,
             dataType: 'json',
@@ -58,13 +60,14 @@
         model.ScriptId = $(this).attr('txt-scriptid');
         model.RouteId = parseInt($(this).attr('data-routeid'));
         model.Remark = $('#txt-remark').val();
+        model.Action = "Reject";
         model.UpdatedBy = user
         model.UpdatedName = name
         model.UpdatedEmail = email
 
         $.ajax({
             type: 'post',
-            url: '/request/Request_reject',
+            url: '/request/Request_update',
             data: JSON.stringify(model),
             cache: false,
             dataType: 'json',
@@ -98,12 +101,12 @@
         model.PlatformId = parseInt($("#txt-platform").val());
         model.AssemblyNumber = $('#txt-assy').val() ? $('#txt-assy').val() : null;
         model.AssemblyRevision = $('#txt-rev').val() ? $('#txt-rev').val() : null;
-        model.ScriptId = $('#txt-route').val() ? $('#txt-route').val() : null;
-        model.Description = $('#txt-desc').val() ? $('#txt-desc').val() : null;
+        model.ScriptId = null;
+        model.Description = $('#txt-description').val() ? $('#txt-description').val() : null;
         model.CreatedBy = user
         model.CreatedName = name
         model.CreatedEmail = email
-
+        debugger
         $.ajax({
             type: 'post',
             url: '/request/Request_Add',
@@ -256,6 +259,8 @@
     function Close() {
         var model = new Object();
         model.ReqId = parseInt($(this).attr('data-reqid'));
+        model.ScriptId = $('#txt-scriptid').val();
+
         //model.TypeId = parseInt($(this).attr('data-typeid'));
         //model.ScriptName = $("#txt-scriptname").val();
         //model.ScriptRev = $('#txt-scriptrev').val();

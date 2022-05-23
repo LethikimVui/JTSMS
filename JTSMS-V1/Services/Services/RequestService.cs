@@ -18,7 +18,7 @@ namespace Services.Services
         {
             List<VApproval> results = new List<VApproval>();
             //StringContent content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
-            using (var response = await httpClient.GetAsync("api/request/Approval_get/"+ reqId))
+            using (var response = await httpClient.GetAsync("api/request/Approval_get/" + reqId))
             {
                 var apiResponse = await response.Content.ReadAsStringAsync();
                 results = JsonConvert.DeserializeObject<List<VApproval>>(apiResponse);
@@ -108,7 +108,7 @@ namespace Services.Services
                 responseResult = JsonConvert.DeserializeObject<ResponseResult>(apiResponse);
             }
             return responseResult;
-        } 
+        }
         public async Task<ResponseResult> Request_reject(RequestViewModel model)
         {
             ResponseResult responseResult = new ResponseResult();
@@ -157,6 +157,16 @@ namespace Services.Services
             return responseResult;
         }
 
-       
+        public async Task<List<VUserRole>> Access_UserRole_Get_By_ScriptId(RequestViewModel model)
+        {
+            List<VUserRole> results = new List<VUserRole>();
+            StringContent content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+            using (var response = await httpClient.PostAsync("api/request/Access_UserRole_Get_By_ScriptId", content))
+            {
+                var apiResponse = await response.Content.ReadAsStringAsync();
+                results = JsonConvert.DeserializeObject<List<VUserRole>>(apiResponse);
+            }
+            return results;
+        }
     }
 }

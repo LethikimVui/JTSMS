@@ -49,27 +49,33 @@ namespace JTSMS.Controllers
         public async Task<IActionResult> Request_submit([FromBody] RequestViewModel model)
         {
             var result = await requestService.Request_submit(model);
-            SentEmail(model);
+            if (result.StatusCode == 200)
+            {
+                SentEmail(model);
+            }
             return Json(new { results = result });
         }
-        public async Task<IActionResult> Request_approve([FromBody] RequestViewModel model)
+        //public async Task<IActionResult> Request_approve([FromBody] RequestViewModel model)
+        //{
+        //    var result = await requestService.Request_approve(model);
+        //    return Json(new { results = result });
+        //}
+        //public async Task<IActionResult> Request_reject([FromBody] RequestViewModel model)
+        //{
+        //    var result = await requestService.Request_reject(model);
+        //    //SentEmail_UpdateStatus(model);
+        //    return Json(new { results = result });
+        //}
+        public async Task<IActionResult> Request_update([FromBody] RequestViewModel model)
         {
             var result = await requestService.Request_approve(model);
-            var results = await requestService.RequestDetail_get_by_id(model.ReqId);
-            var StatusId = results.StatusId;
-            if (true)
+            if (result.StatusCode == 200)
             {
-
+                SentEmail_UpdateStatus(model);
             }
-            SentEmail_UpdateStatus(model, "Approved");
-            return Json(new { results = result });
-        } 
-        public async Task<IActionResult> Request_reject([FromBody] RequestViewModel model)
-        {
-            var result = await requestService.Request_reject(model);
-            //SentEmail_UpdateStatus(model);
             return Json(new { results = result });
         }
+
         public async Task<IActionResult> Request_close_deviation([FromBody] RequestViewModel model)
         {
             var result = await requestService.Request_close_deviation(model);
@@ -116,7 +122,7 @@ namespace JTSMS.Controllers
         public async Task<IActionResult> UploadFile(IFormFile file, string filename)
         {
             string uploadFolder = @"\\" + configuration["Server"] + @"\JTSMS\Attachment";
-           
+
             var fullFilePath = Path.Combine(uploadFolder, filename);
             try
             {
@@ -129,7 +135,7 @@ namespace JTSMS.Controllers
             {
                 Console.Write(ex);
             }
-          
+
             return Ok(0);
         }
 
@@ -203,14 +209,14 @@ namespace JTSMS.Controllers
                     message.CC.Add(new MailAddress(email));
                 }
             }
-            message.Subject = "[" + model.ReqNumber + "] New Request Is Pending For Your Approval";
+            message.Subject = "New Request Is Pending For Your Approval";
             message.Body = body;
             message.IsBodyHtml = true;
             smtp.Send(message);
         }
         #endregion
         #region SentEmail_UpdateStatus
-        public async void SentEmail_UpdateStatus(RequestViewModel model, string status)
+        public async void SentEmail_UpdateStatus(RequestViewModel model)
         {
             string body = string.Empty;
             body += "<div style='border - top:3px solid #22BCE5'>Hi,</div>";
@@ -222,19 +228,51 @@ namespace JTSMS.Controllers
             SmtpClient smtp = new SmtpClient("corimc04.corp.JABIL.ORG");
             message.From = new MailAddress("JTSMS@Jabil.com");
 
-            var Approval_get_current = await requestService.Approval_get_current(model.ReqId);
-            if (Approval_get_current.Any())
+
+
+            var results = await requestService.RequestDetail_get_by_id(model.ReqId);
+            var statusId = results.StatusId;
+
+            switch (statusId)
             {
-                foreach (var email in Approval_get_current)
-                {
-                    if (email != null)
+                case 2: // pending approval
+                    var Approval_get_current = await requestService.Approval_get_current(model.ReqId);
+                    if (Approval_get_current.Any())
                     {
-                        message.To.Add(new MailAddress(email.Email));
+                        foreach (var email in Approval_get_current)
+                        {
+                            if (email != null)
+                            {
+                                message.To.Add(new MailAddress(email.Email));
+                            }
+                        }
+                        message.Subject = "[Pending Approval] New Request Is Pending Approval";
                     }
-                }
-                message.Subject = "[Pending Approval] New Request Is Pending Approval";
+                    break;
+                case 3: //rejected
+                    var request_detail = await requestService.RequestDetail_get_by_id(model.ReqId);
+                    message.To.Add(new MailAddress(request_detail.CreatedEmail));
+                    message.Subject = "[Rejected] Ticket is rejected";
+
+                    break;
+                case 4: // approved
+                    var UserRole_Get_By_ScriptId = await requestService.Access_UserRole_Get_By_ScriptId(model);
+                    if (UserRole_Get_By_ScriptId.Any())
+                    {
+                        foreach (var email in UserRole_Get_By_ScriptId)
+                        {
+                            if (email != null)
+                            {
+                                message.To.Add(new MailAddress(email.UserEmail));
+                            }
+                        }
+                        message.Subject = "[Closed] Ticket is approved and closed";
+                    }
+                    break;
+                default:
+                    break;
             }
-          
+
             message.CC.Add(new MailAddress(model.UpdatedEmail));
             var configureEmail = configuration["Email:Cc"].Split(';');
             foreach (var email in configureEmail)
@@ -244,7 +282,7 @@ namespace JTSMS.Controllers
                     message.CC.Add(new MailAddress(email));
                 }
             }
-            message.Subject = "[" + model.ReqNumber + "] New Request Is Pending For Your Approval";
+            //message.Subject = "[" + model.Action + "]";
             message.Body = body;
             message.IsBodyHtml = true;
             smtp.Send(message);
@@ -258,7 +296,7 @@ namespace JTSMS.Controllers
             string body = string.Empty;
 
             body += "<div style='border - top:3px solid #22BCE5'>Hi,</div>";
-            body += "The request is closed";
+            body += "Deviation Closed";
 
             body += "<p>You may access <a href='http://localhost:33714/Request/RequestDetail_get_by_id?reqid=" + model.ReqId + "'>here</a> to get detail</p>";
             body += " <p>This is automatic email, please do not reply</p>    Thanks";
@@ -266,15 +304,18 @@ namespace JTSMS.Controllers
             SmtpClient smtp = new SmtpClient("corimc04.corp.JABIL.ORG");
             message.From = new MailAddress("JTSMS@Jabil.com");
 
-            //var Approval_get_current = await requestService.Approval_get_current(model.ReqId);
-            //foreach (var email in Approval_get_current)
-            //{
-            //    if (email != null)
-            //    {
-            //        message.To.Add(new MailAddress(email.Email));
-            //    }
-            //}
-
+            var UserRole_Get_By_ScriptId = await requestService.Access_UserRole_Get_By_ScriptId(model);
+            if (UserRole_Get_By_ScriptId.Any())
+            {
+                foreach (var email in UserRole_Get_By_ScriptId)
+                {
+                    if (email != null)
+                    {
+                        message.To.Add(new MailAddress(email.UserEmail));
+                    }
+                }
+                message.Subject = "[Deviation Closed]";
+            }
             message.CC.Add(new MailAddress(model.UpdatedEmail));
             var configureEmail = configuration["Email:Cc"].Split(';');
             foreach (var email in configureEmail)
@@ -284,7 +325,6 @@ namespace JTSMS.Controllers
                     message.CC.Add(new MailAddress(email));
                 }
             }
-            message.Subject = "Closed";
             message.Body = body;
             message.IsBodyHtml = true;
             smtp.Send(message);

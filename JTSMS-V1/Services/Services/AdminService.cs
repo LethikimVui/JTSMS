@@ -36,10 +36,11 @@ namespace Services.Services
             }
             return responseResult;
         }
-        public async Task<List<VUserRole>> Access_UserRole_get()
+        public async Task<List<VUserRole>> Access_UserRole_get(UserRoleViewModel model)
         {
             List<VUserRole> userRoles = new List<VUserRole>();
-            using (var response = await httpClient.GetAsync("api/admin/Access_UserRole_get"))
+            StringContent content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+            using (var response = await httpClient.PostAsync("api/admin/Access_UserRole_get", content))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 userRoles = JsonConvert.DeserializeObject<List<VUserRole>>(apiResponse);
@@ -79,5 +80,38 @@ namespace Services.Services
             return responseResult;
         }
 
+        public async Task<List<VMasterApproval>> Master_Approval_get_by_routeId(int routeId)
+        {
+            List<VMasterApproval> userRoles = new List<VMasterApproval>();
+            using (var response = await httpClient.GetAsync("api/Admin/Master_Approval_get_by_routeId/" + routeId))
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                userRoles = JsonConvert.DeserializeObject<List<VMasterApproval>>(apiResponse);
+            }
+            return userRoles;
+        }
+
+        public async Task<ResponseResult> Master_Approval_insert(UserRoleViewModel model)
+        {
+            ResponseResult responseResult = new ResponseResult();
+            StringContent content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+            using (var response = await httpClient.PostAsync("api/admin/Master_Approval_insert", content))
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                responseResult = JsonConvert.DeserializeObject<ResponseResult>(apiResponse);
+            }
+            return responseResult;
+        }
+        public async Task<ResponseResult> Master_Approval_delete(UserRoleViewModel model)
+        {
+            ResponseResult responseResult = new ResponseResult();
+            StringContent content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+            using (var response = await httpClient.PostAsync("api/admin/Master_Approval_delete", content))
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                responseResult = JsonConvert.DeserializeObject<ResponseResult>(apiResponse);
+            }
+            return responseResult;
+        }
     }
 }

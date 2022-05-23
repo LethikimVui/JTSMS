@@ -68,66 +68,101 @@
                         </li>
                         @if (User.Identity.IsAuthenticated && User.IsInRole("SYSTEM ADMIN"))
                         {
-                        <li class="menu-dropdown mega-menu-dropdown ">
-                            <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
-                                Administration <i class="fa fa-angle-down"></i>
-                            </a>
+                            <li class="menu-dropdown mega-menu-dropdown ">
+                                <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+                                    Configuration <i class="fa fa-angle-down"></i>
+                                </a>
 
-                            <ul class="dropdown-menu" style="min-width: 250px">
-                                <li>
-                                    <div class="mega-menu-content">
-                                        <div class="row">
-                                            <!--one menu-->
+                                <ul class="dropdown-menu" style="min-width: 250px">
+                                    <li>
+                                        <div class="mega-menu-content">
+                                            <div class="row">
+                                                <!--one menu-->
 
-                                            <div class="col-md-12">
-                                                <ul class="mega-menu-submenu">
-                                                   
-                                                    <li>
-                                                        <a asp-action="Get" asp-controller="Admin">
-                                                            <i class="icon-user"></i> User List
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a asp-action="Approval" asp-controller="Admin">
-                                                            <i class="icon-user"></i> Approval List
-                                                        </a>
-                                                    </li>
-                                                </ul>
+                                                <div class="col-md-12">
+                                                    <ul class="mega-menu-submenu">
+
+                                                        <li>
+                                                            <a asp-action="Insert" asp-controller="Config">
+                                                                <i class="icon-user"></i> WatchDogConfig
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a asp-action="Approval" asp-controller="Admin">
+                                                                <i class="icon-user"></i> Approval List
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
                                             </div>
-
                                         </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("SYSTEM ADMIN"))
+                        {
+                            <li class="menu-dropdown mega-menu-dropdown ">
+                                <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+                                    Administration <i class="fa fa-angle-down"></i>
+                                </a>
+
+                                <ul class="dropdown-menu" style="min-width: 250px">
+                                    <li>
+                                        <div class="mega-menu-content">
+                                            <div class="row">
+                                                <!--one menu-->
+
+                                                <div class="col-md-12">
+                                                    <ul class="mega-menu-submenu">
+
+                                                        <li>
+                                                            <a asp-action="Search" asp-controller="Admin">
+                                                                <i class="icon-user"></i> User List
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a asp-action="Approval" asp-controller="Admin">
+                                                                <i class="icon-user"></i> Approval List
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
                         }
                         <li class="dropdown dropdown-user dropdown-dark" style="position: absolute; right: 0px;top:0px">
                             @if (User.Identity.IsAuthenticated)
                             {
-                            <a id="userinfo" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" data-user="@User.GetSpecificClaim("Ntlogin")" data-display-name="@User.GetSpecificClaim("UserName")" data-email="@User.GetSpecificClaim("UserEmail")">
-                                <img alt="" class="img-circle" src="~/assets/admin/layout3/img/logout.png" style="width: 25px">
-                                Hi @User.GetSpecificClaim("UserName") (@User.GetSpecificClaim("Ntlogin"))
-                            </a>
+                                <a id="userinfo" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" data-user="@User.GetSpecificClaim("Ntlogin")" data-display-name="@User.GetSpecificClaim("UserName")" data-email="@User.GetSpecificClaim("UserEmail")">
+                                    <img alt="" class="img-circle" src="~/assets/admin/layout3/img/logout.png" style="width: 25px">
+                                    Hi @User.GetSpecificClaim("UserName") (@User.GetSpecificClaim("Ntlogin"))
+                                </a>
                             }
                             else
                             {
-                            <a id="userinfo" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                <img alt="" class="img-circle" src="~/assets/admin/layout3/img/logout.png" style="width: 25px">
-                            </a>
+                                <a id="userinfo" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <img alt="" class="img-circle" src="~/assets/admin/layout3/img/logout.png" style="width: 25px">
+                                </a>
                             }
                             <ul class="dropdown-menu dropdown-menu-default">
                                 <li>
                                     @if (User.Identity.IsAuthenticated)
                                     {
-                                    <a asp-action="Logout" asp-controller="Account">
-                                        <i class="icon-key"></i> Log Out
-                                    </a>
+                                        <a asp-action="Logout" asp-controller="Account">
+                                            <i class="icon-key"></i> Log Out
+                                        </a>
                                     }
                                     else
                                     {
-                                    <a asp-action="Login" asp-controller="Account">
-                                        <i class="icon-key"></i> Log In
-                                    </a>
+                                        <a asp-action="Login" asp-controller="Account">
+                                            <i class="icon-key"></i> Log In
+                                        </a>
                                     }
                                 </li>
                             </ul>

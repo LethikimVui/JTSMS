@@ -28,6 +28,13 @@ namespace API.Controllers
         {
             var results = await context.Query<VCustomer>().AsNoTracking().FromSql(SPCommon.Customer_get).ToListAsync();
             return results;
+        } 
+        [HttpGet("Master_Route_get")]
+        [Obsolete]
+        public async Task<List<VRoute>> Master_Route_get()
+        {
+            var results = await context.Query<VRoute>().AsNoTracking().FromSql(SPCommon.Master_Route_get).ToListAsync();
+            return results;
         }
         [HttpGet("Station_get")]
         [Obsolete]

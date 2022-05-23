@@ -213,6 +213,13 @@ namespace API.Controllers
             var results = await context.Query<VDetail>().AsNoTracking().FromSql(SPRequest.RequestDetail_get, model.CustId, model.StationId, model.AssemblyNumber, model.AssemblyRevision, model.ScriptId).ToListAsync();
             return results;
         }
+        [HttpPost("Access_UserRole_Get_By_ScriptId")]
+        [Obsolete]
+        public async Task<List<VUserRole>> Access_UserRole_Get_By_ScriptId([FromBody] RequestViewModel model)
+        {
+            var results = await context.Query<VUserRole>().AsNoTracking().FromSql(SPRequest.Access_UserRole_Get_By_ScriptId, model.ScriptId).ToListAsync();
+            return results;
+        }
         [HttpGet("RequestDetail_get_by_id/{reqId}")]
         [Obsolete]
         public async Task<VDetail> RequestDetail_get_by_id(int reqId)

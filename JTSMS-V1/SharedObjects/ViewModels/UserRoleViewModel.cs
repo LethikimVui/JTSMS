@@ -14,9 +14,11 @@ namespace SharedObjects.ViewModels
         public string UserEmail { get; set; }
         public int RoleId { get; set; }
         public int UserRoleId { get; set; }
+        public int ApprovalId { get; set; }
         public int OwnerId { get; set; }
         public byte PlantId { get; set; }
-        public byte CustId { get; set; }
+        public int CustId { get; set; }
+        public int RouteId { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedName { get; set; }
         public string CreatedEmail { get; set; }

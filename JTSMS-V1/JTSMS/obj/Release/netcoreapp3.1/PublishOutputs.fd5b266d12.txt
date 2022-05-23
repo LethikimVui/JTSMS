@@ -1118,7 +1118,8 @@ C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\J
 C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\assets\login\scss\style.scss
 C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\css\site.css
 C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\favicon.ico
-C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\js\admin.js
+C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\js\admin-approval.js
+C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\js\admin-user.js
 C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\js\bootbox.js\bootbox.js
 C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\js\bootbox.js\bootbox.min.js
 C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\js\jquery-validation\additional-methods.js

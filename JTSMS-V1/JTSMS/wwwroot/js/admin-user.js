@@ -1,4 +1,6 @@
 ﻿$(document).ready(function () {
+    $('body').off('click', '#btn-search').on('click', '#btn-search', Search);
+
     $('body').off('click', '#btn-add').on('click', '#btn-add', Add);
     $('body').off('click', '#btn-delete').on('click', '#btn-delete', Delete);
     $('body').off('click', '#btn-search-input').on('click', '#btn-search-input', SearchName);
@@ -10,6 +12,30 @@
     name = document.getElementById('userinfo').getAttribute('data-display-name');
     email = document.getElementById('userinfo').getAttribute('data-email');
 
+    function Search() {
+        $('#tbl-content').html('');
+        var model = new Object();
+
+        model.CustId = parseInt($("#txt-customer-search").val());
+        model.RoleId = parseInt($("#txt-role-search").val());       
+        model.Ntlogin = $('#txt-ntlogin-search').val() ? $('#txt-ntlogin-search').val() : null;
+        debugger
+        Load(model)
+        
+    }
+    function Load(model) {
+        $.ajax({
+            type: 'post',
+            url: '/Admin/User_Get',
+            //dataType: 'json',
+            data: JSON.stringify(model),
+            contentType: 'application/json;charset=uft-8',
+            success: function (response) {
+                debugger
+                $('#tbl-content').html(response);
+            }
+        })
+    }
     function SearchName() {
         _ntid = $('#txt-search-input').val();
         debugger
@@ -37,7 +63,7 @@
         model.Ntlogin = $('#txt-Ntlogin').val();
         model.RoleId = parseInt(document.getElementById("txt-roleId").value);
         model.PlantId = 1 // parseInt(document.getElementById("txt-wc").value);
-        model.CustId = parseInt(document.getElementById("txt-custid").value);
+        model.CustId = parseInt(document.getElementById("txt-custId").value);
         model.CreatedBy = user;
         model.CreatedName = name;
         model.CreatedEmail = email;
@@ -51,9 +77,7 @@
                 var data = response.results
 
                 if (data.statusCode == 200) {
-                    bootbox.alert(data.message, function () {
-                        location.reload(true);
-                    })
+                    bootbox.alert(data.message, function () {Load(model);})
                 }
                 else if (data.statusCode == 400) {
                     bootbox.alert(data.message)
@@ -95,6 +119,8 @@
         model.CustId = parseInt($('#txt-custid').val());
         model.RoleId = parseInt($('#txt-roleid').val());
         model.UpdatedBy = user;
+        model.UpdatedName = name;
+        model.UpdatedEmail = email;
         debugger
         $.ajax({
             type: 'post',
@@ -106,7 +132,7 @@
                 var data = response.results;
                 debugger
                 if (data.statusCode == 200) {
-                    bootbox.alert("Save Successfully!", function () { window.location.reload(); })
+                    bootbox.alert("Save Successfully!", function () { { Load(model); }})
                 }
                 else
                     bootbox.alert("Save Failed!")
@@ -122,6 +148,8 @@
         var model = new Object();
         model.UserRoleId = parseInt(userRoleId);
         model.UpdatedBy = user;
+        model.UpdatedName = name;
+        model.UpdatedEmail = email;
         $.ajax({
             type: 'post',
             url: '/admin/Access_UserRole_delete',
@@ -132,7 +160,9 @@
                 var data = response.results;
                 if (data.statusCode == 200) {
                     bootbox.alert(`${ntlogin} is deleted`, function () {
-                        location.reload(true);
+                        model.CustId = parseInt($('#txt-customer-search').val());
+                    debugger
+                        { Load(model); };
                     })
                 }
                 else {

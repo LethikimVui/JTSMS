@@ -162,3 +162,7 @@ C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\J
 C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\JTSMS.dll
 C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\JTSMS.pdb
 C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\JTSMS.genruntimeconfig.cache
+C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\Razor\Views\Admin\Search.cshtml.g.cs
+C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\Razor\Views\Admin\User_Get.cshtml.g.cs
+C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\Razor\Views\Admin\Approval.cshtml.g.cs
+C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Release\netcoreapp3.1\Razor\Views\Admin\Master_Approval_get_by_routeId.cshtml.g.cs

@@ -1,0 +1,85 @@
+﻿@model SharedObjects.ViewModels.ConfigViewModel
+
+@{
+    ViewData["Title"] = "WatchDogConfig_insert";
+    var Customers = ViewData["Customer"] as IEnumerable<SharedObjects.ValueObjects.VCustomer>;
+
+}
+
+<div class="row">
+    <div class="col-md-offset-0">
+
+        <div class="portlet light col-md-10 col-md-offset-1">
+            <div class="portlet green">
+                <h2 style="font:bold">WatchDog Configuration</h2>
+            </div>
+            <form >
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-3">
+                    <label asp-for="CustId" class="control-label"></label>
+                    <select class="form-control" id="txt-customer" data-search="customer" name="customer" style="color:mediumvioletred">
+                        <option value="">--Please Select--</option>
+                        @foreach (var item in Customers.OrderByDescending(c => c.CustName).ToList())
+                        {
+                            <option value=@item.CustId>@item.CustName</option>
+                        }
+                    </select>
+                    <span asp-validation-for="CustId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="ProcessStep" class="control-label"></label>
+                    <input asp-for="ProcessStep" id="txt-processstep" class="form-control" />
+                    <span asp-validation-for="ProcessStep" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="RouteStep" class="control-label"></label>
+                    <input asp-for="RouteStep" id="txt-routestep" class="form-control" />
+                    <span asp-validation-for="RouteStep" class="text-danger"></span>
+                </div>
+                @*<div class="form-group col-md-3">
+                        <label asp-for="AssyNumber" class="control-label"></label>
+                        <input asp-for="AssyNumber" class="form-control" />
+                        <span asp-validation-for="AssyNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="AssyRev" class="control-label"></label>
+                        <input asp-for="AssyRev" class="form-control" />
+                        <span asp-validation-for="AssyRev" class="text-danger"></span>
+                    </div>*@
+                <div class="form-group col-md-3">
+                    <label asp-for="TesterName" class="control-label"></label>
+                    <input asp-for="TesterName" id="txt-testername" class="form-control" />
+                    <span asp-validation-for="TesterName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="TesterPcName" class="control-label"></label>
+                    <input asp-for="TesterPcName" id="txt-testerpcname" class="form-control" />
+                    <span asp-validation-for="TesterPcName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="EquipmentId" class="control-label"></label>
+                    <input asp-for="EquipmentId" id="txt-equipmentid" class="form-control" />
+                    <span asp-validation-for="EquipmentId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="TestTime" class="control-label"></label>
+                    <input type="number" asp-for="TestTime" id="txt-testtime" class="form-control" />
+                    <span asp-validation-for="TestTime" class="text-danger"></span>
+                </div>
+                @*<div class="form-group col-md-3">
+                        <label asp-for="IsDmz" class="control-label"></label>
+                        <input asp-for="IsDmz" class="form-control" />
+                        <span asp-validation-for="IsDmz" class="text-danger"></span>
+                    </div>*@
+                <div class="form-group">
+                    <input type="submit" id="btn-add" value="Add" class="btn btn-default" />
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/config.js"></script>
+} 
