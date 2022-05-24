@@ -69,40 +69,41 @@
                     </div>
                     @if (Model.StatusId == 1)
                     {
-                        <div class="form-group col-md-2 pull-left">
-                            <label class="text-center bold font-green-sharp" for="">ScriptName</label>
-                            <input id="txt-scriptname" type="text" class="form-control" value="@Model.ScriptName" />
-                        </div>
-                        <div class="form-group col-md-2 pull-left">
-                            <label class="text-center bold font-green-sharp" for="">ScriptRev</label>
-                            <input id="txt-scriptrev" type="text" class="form-control" value="@Model.ScriptRev" />
-                        </div>
-                        <div class="form-group col-md-2 pull-left">
-                            <label class="text-center bold font-green-sharp" for="">Firmware</label>
-                            <input id="txt-firmware" type="text" class="form-control" value="@Model.Firmware" />
-                        </div>
-                        <div class="form-group col-md-2 pull-left">
-                            <label class="text-center bold font-green-sharp" for="">Firmware Revision</label>
-                            <input id="txt-firmwarerev" type="text" class="form-control" value="@Model.FirmwareRevision" />
-                        </div>
-                        <div class="form-group col-md-4 pull-left">
-                            <label class="text-center bold font-green-sharp" for="">Description</label>
-                            <input id="txt-description" type="text" class="form-control" value="@Model.Description" />
-                        </div>
-                        <div class="form-group col-md-4 pull-left">
-                            <label class="text-center bold font-green-sharp" for="">OriginalScript</label>
-                            <input id="txt-script" type="file" class="form-control" accept=".jts"/>
-                        </div>
-                        <div class="form-group col-md-4 pull-left">
-                            <label class="text-center bold font-green-sharp" for="">Encrypted</label>
-                            <input id="txt-encripted" type="file" class="form-control" accept=".jts_encrypted"/>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <a class="btn btn-success" id="btn-submit" data-reid="@Model.ReqId" data-typeid="@Model.TypeId">Submit</a>
-                        </div>
-                        @*<div class="form-group col-md-1">
-                                <a class="btn btn-success" id="btn-test">Test</a>
-                            </div>*@
+                <form id="frm-submit">
+
+
+                    <div class="form-group col-md-2 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">ScriptName</label>
+                        <input id="txt-scriptname" name="scriptname" type="text" class="form-control" value="@Model.ScriptName" />
+                    </div>
+                    <div class="form-group col-md-2 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">ScriptRev</label>
+                        <input id="txt-scriptrev"  name="scriptrev" type="text" class="form-control" value="@Model.ScriptRev" />
+                    </div>
+                    <div class="form-group col-md-2 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">Firmware</label>
+                        <input id="txt-firmware"  name="firmware" type="text" class="form-control" value="@Model.Firmware" />
+                    </div>
+                    <div class="form-group col-md-2 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">Firmware Revision</label>
+                        <input id="txt-firmwarerev"  name="firmwarerev" type="text" class="form-control" value="@Model.FirmwareRevision" />
+                    </div>
+                    <div class="form-group col-md-4 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">Description</label>
+                        <input id="txt-description"  name="description" type="text" class="form-control" value="@Model.Description" />
+                    </div>
+                    <div class="form-group col-md-4 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">OriginalScript</label>
+                        <input id="txt-script"  name="script" type="file" class="form-control" accept=".jts" />
+                    </div>
+                    <div class="form-group col-md-4 pull-left">
+                        <label class="text-center bold font-green-sharp" for="">Encrypted</label>
+                        <input id="txt-encrypted"  name="encrypted" type="file" class="form-control" accept=".jts_encrypted" />
+                    </div>
+                    <div class="form-group col-md-12">
+                        <a class="btn btn-success" id="btn-submit" data-reid="@Model.ReqId" data-typeid="@Model.TypeId">Submit</a>
+                    </div>
+                </form>
                     }
                     else
                     {
@@ -208,9 +209,8 @@
                                 <a class="btn btn-success" id="btn-reject" data-reqid="@Model.ReqId" data-routeid="@Approval_get_current.FirstOrDefault().RouteId">Reject</a>
                             </div>
                         }
-                        if (Model.StatusId == 4 && Model.TypeId == 2)
+                        if (Model.StatusId == 4 && Model.TypeId == 2 && User.GetSpecificClaim("Ntlogin") == "1099969")
                         {
-
                             <div class="form-group col-md-1">
                                 <a class="btn btn-success" id="btn-close" data-reqid="@Model.ReqId">Close Deviation</a>
                             </div>
@@ -227,12 +227,12 @@
 
     <script src="~/js/request.js"></script>
     <script>
-        document.getElementById('txt-encripted').addEventListener('change', Encripted)
+        document.getElementById('txt-encrypted').addEventListener('change', Encripted)
         function Encripted() {
             var reader = new FileReader(); // define a Reader
-            var file = $('#txt-encripted')[0].files[0]; // get the File obect
+            var file = $('#txt-encrypted')[0].files[0]; // get the File obect
             if (!file) {
-                alert('no encripted file selected');
+                alert('no encrypted file selected');
                 return
             } // check if user selected a file
             reader.onload = function (f) {
@@ -241,7 +241,7 @@
                 var sha1_hash = CryptoJS.SHA1(file_wordArr); //calculate SHA1 hash
                 var sha1_hash1 = sha1_hash.toString()
                 //alert("Calculated SHA1:" + sha1_hash.toString()); //output result
-                $('#txt-encripted').attr('data-hash-encripted', sha1_hash1)
+                $('#txt-encrypted').attr('data-hash-encrypted', sha1_hash1)
             };
             reader.readAsArrayBuffer(file); // read the file as ArrayBuffer
         }
@@ -251,7 +251,7 @@
             var reader = new FileReader(); // define a Reader
             var file = $('#txt-script')[0].files[0]; // get the File obect
             if (!file) {
-                alert('no encripted file selected');
+                alert('no script file selected');
                 return
             } // check if user selected a file
             reader.onload = function (f) {

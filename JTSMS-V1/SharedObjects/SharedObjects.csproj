@@ -83,6 +83,7 @@
     <Compile Include="ValueObjects\VApproval.cs" />
     <Compile Include="ValueObjects\VDetail.cs" />
     <Compile Include="ValueObjects\VRole.cs" />
+    <Compile Include="ValueObjects\VRouteStep.cs" />
     <Compile Include="ValueObjects\VRoute.cs" />
     <Compile Include="ValueObjects\VUserRole.cs" />
     <Compile Include="ValueObjects\VType.cs" />

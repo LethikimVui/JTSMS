@@ -39,7 +39,7 @@ namespace JTSMS.Controllers
         public async Task<IActionResult> Insert()
         {
             ViewData["Customer"] = await commonService.Customer_Get();
-            // ViewData["Station"] = await commonService.Station_get();
+            //ViewData["RouteStep"] = await commonService.Master_RouteStep_get();
             return View();
         }
         [HttpPost]

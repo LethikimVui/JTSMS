@@ -34,7 +34,7 @@ namespace SharedObjects.ViewModels
         public int TypeId { get; set; }
         public int PlatformId { get; set; }
         public string File { get; set; }
-        public string EncriptedFileName { get; set; }
+        public string EncryptedFileName { get; set; }
         public string ScriptFileName { get; set; }
         public string Remark { get; set; }
         public string Action { get; set; }

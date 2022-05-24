@@ -60,39 +60,7 @@ namespace API.Controllers
                     {
                         return Conflict(new ResponseResult(409, "No record for New request, you are not allowed to request ECN / Deviation! Please check"));
                     }
-                }
-                //if (model.TypeId == 1) // New
-                //{
-                //    if (!context.Requestdetail.Where(s => s.CustId == model.CustId && s.StationId == model.StationId && s.AssemblyNumber == model.AssemblyNumber && s.AssemblyRevision == model.AssemblyRevision && s.PlatformId == model.PlatformId).Any())
-                //    {
-
-                //        await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_add, model.CustId, model.StationId, model.TypeId, model.PlatformId, model.AssemblyNumber, model.AssemblyRevision, model.Description, model.CreatedBy, model.CreatedName, model.CreatedEmail);
-                //        return Ok(new ResponseResult(200, "New Request added"));
-                //    }
-                //    else
-                //    {
-                //        return Conflict(new ResponseResult(409, "The New request is already existing"));
-                //    }
-                //}
-                //else
-                //{
-                //    if (context.Requestdetail.Where(s => s.CustId == model.CustId && s.StationId == model.StationId && s.AssemblyNumber == model.AssemblyNumber && s.AssemblyRevision == model.AssemblyRevision && s.PlatformId == model.PlatformId  ).Any())
-                //    {
-                //        if (!context.Requestdetail.Where(s => s.CustId == model.CustId && s.StationId == model.StationId && s.AssemblyNumber == model.AssemblyNumber && s.AssemblyRevision == model.AssemblyRevision && s.PlatformId == model.PlatformId && s.TypeId == model.TypeId).Any())
-                //        {
-                //            await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_add, model.CustId, model.StationId, model.TypeId, model.PlatformId, model.AssemblyNumber, model.AssemblyRevision, model.Description, model.CreatedBy, model.CreatedName, model.CreatedEmail);
-                //            return Ok(new ResponseResult(200, "Request added"));
-                //        }
-                //        else
-                //        {
-                //            return Ok(new ResponseResult(409, "The PCN / Deviation request is already existing"));
-                //        }
-                //    }
-                //    else
-                //    {
-                //        return Conflict(new ResponseResult(409, "No record for New request, you are not allowed to request ECN / Deviation! Please check"));
-                //    }
-                //}
+                }               
             }
             catch (Exception ex)
             {
@@ -106,12 +74,11 @@ namespace API.Controllers
         {
             try
             {
-                await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_submit, model.ReqId, model.TypeId, model.ScriptName, model.ScriptRev, model.Firmware, model.FirmwareRevision, model.FileHash, model.ScriptFileName, model.EncriptedFileName, model.Description, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
-                return Ok(new ResponseResult(200, "ok"));
+                await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_submit, model.ReqId, model.TypeId, model.ScriptName, model.ScriptRev, model.Firmware, model.FirmwareRevision, model.FileHash, model.ScriptFileName, model.EncryptedFileName, model.Description, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
+                return Ok(new ResponseResult(200, "Request is submitted, you can use the script ID in your program"));
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new ResponseResult(400, ex.Message));
             }
         }
@@ -122,11 +89,10 @@ namespace API.Controllers
             try
             {
                 await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_approve, model.ReqId, model.RouteId, model.Remark, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
-                return Ok(new ResponseResult(200, "Request_approve"));
+                return Ok(new ResponseResult(200, "Request is approved"));
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new ResponseResult(400, ex.Message));
             }
         } 
@@ -137,29 +103,28 @@ namespace API.Controllers
             try
             {
                 await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_reject, model.ReqId, model.RouteId, model.Remark, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
-                return Ok(new ResponseResult(200, "Request_reject"));
+                return Ok(new ResponseResult(200, "Request is rejected"));
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new ResponseResult(400, ex.Message));
             }
         }
-        [HttpPost("Request_close")]
-        [Obsolete]
-        public async Task<IActionResult> Request_close([FromBody] RequestViewModel model)
-        {
-            try
-            {
-                await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_close, model.ReqId, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
-                return Ok(new ResponseResult(200, "Request_close"));
-            }
-            catch (Exception ex)
-            {
+        //[HttpPost("Request_close")]
+        //[Obsolete]
+        //public async Task<IActionResult> Request_close([FromBody] RequestViewModel model)
+        //{
+        //    try
+        //    {
+        //        await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_close, model.ReqId, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
+        //        return Ok(new ResponseResult(200, "Request_close"));
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return BadRequest(new ResponseResult(400, ex.Message));
-            }
-        } 
+        //        return BadRequest(new ResponseResult(400, ex.Message));
+        //    }
+        //} 
         [HttpPost("Request_close_deviation")]
         [Obsolete]
         public async Task<IActionResult> Request_close_deviation([FromBody] RequestViewModel model)
@@ -167,11 +132,10 @@ namespace API.Controllers
             try
             {
                 await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_close_deviation, model.ReqId, model.Remark, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
-                return Ok(new ResponseResult(200, "Request_close"));
+                return Ok(new ResponseResult(200, "The Deviation is closed! Please change the script ID to run in production"));
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new ResponseResult(400, ex.Message));
             }
         }
@@ -182,11 +146,10 @@ namespace API.Controllers
             try
             {
                 await context.Database.ExecuteSqlCommandAsync(SPRequest.RequestDetail_delete, model.ReqId, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
-                return Ok(new ResponseResult(200, "RequestDetail_deleted"));
+                return Ok(new ResponseResult(200, "The Request "+ model.ReqId + " is already deleted"));
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new ResponseResult(400, ex.Message));
             }
         }

@@ -13,6 +13,7 @@ namespace Services.Interfaces
         Task<List<VStation>> Station_get();
         Task<List<VType>> Type_get();
         Task<List<VRoute>> Master_Route_get();
+        Task<List<VRouteStep>> Master_RouteStep_get();
         Task<List<VUserRole>> Access_UserRole_Get_By_ScriptId(string scriptId);
 
     }

@@ -39,6 +39,7 @@ namespace API.Models
         public virtual DbQuery<VRoute> VRoute { get; set; }
         public virtual DbQuery<VMasterApproval> VMasterApproval { get; set; }
         public virtual DbQuery<VConfig> VConfig { get; set; }
+        public virtual DbQuery<VRouteStep> VRouteStep { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -91,45 +91,72 @@
 
     }
 
+    //$('#frm-add-1').validate({
+    //    rules: {
+    //        customer: { required: true, },
+    //        station: { required: true, },
+    //        route: { required: true, },
+    //        assy: { required: true, },
+    //        rev: { required: true, },
+    //        type: { required: true, },
+    //        platform: { required: true, },
+    //    },
+    //    messages: {
+    //        station: { required: "dasda",},
+    //    }
+    //})
+
     function Add() {
+        //if ($('#frm-add-1').valid()) {
 
-        var model = new Object();
-        model.CustId = parseInt($("#txt-customer").val());
-        model.StationId = parseInt($("#txt-station").val());
-        model.RouteId = parseInt($("#txt-route").val());
-        model.TypeId = parseInt($("#txt-type").val());
-        model.PlatformId = parseInt($("#txt-platform").val());
-        model.AssemblyNumber = $('#txt-assy').val() ? $('#txt-assy').val() : null;
-        model.AssemblyRevision = $('#txt-rev').val() ? $('#txt-rev').val() : null;
-        model.ScriptId = null;
-        model.Description = $('#txt-description').val() ? $('#txt-description').val() : null;
-        model.CreatedBy = user
-        model.CreatedName = name
-        model.CreatedEmail = email
-        debugger
-        $.ajax({
-            type: 'post',
-            url: '/request/Request_Add',
-            data: JSON.stringify(model),
-            contentType: 'application/json;charset=utf-8',
-            success: function (response) {
+        customer = parseInt($("#txt-customer").val());
+        station = parseInt($("#txt-station").val());
+        route = parseInt($("#txt-route").val());
+        type = parseInt($("#txt-type").val());
+        platform = parseInt($("#txt-platform").val());
+        assy = $('#txt-assy').val() ? $('#txt-assy').val() : null;
+        rev = $('#txt-rev').val() ? $('#txt-rev').val() : null;
+        if (customer && station && route && type && platform && assy && rev) {
+            var model = new Object();
+            model.CustId = customer;
+            model.StationId = station;
+            model.RouteId = route;
+            model.TypeId = type;
+            model.PlatformId = platform;
+            model.AssemblyNumber = assy;
+            model.AssemblyRevision = rev;
+            //model.ScriptId = null;
+            model.Description = $('#txt-description').val() ? $('#txt-description').val() : null;
+            model.CreatedBy = user
+            model.CreatedName = name
+            model.CreatedEmail = email
+            debugger
+            $.ajax({
+                type: 'post',
+                url: '/request/Request_Add',
+                data: JSON.stringify(model),
+                contentType: 'application/json;charset=utf-8',
+                success: function (response) {
 
-                var statusCode = response.results.statusCode;
-                var message = response.results.message;
+                    var statusCode = response.results.statusCode;
+                    var message = response.results.message;
 
-                if (statusCode == 200) {
-                    bootbox.alert(message, function () { Load(model); });
+                    if (statusCode == 200) {
+                        bootbox.alert(message, function () { Load(model); });
+                    }
+                    else if (statusCode == 409) {
+                        bootbox.alert(message);
+                    }
+                    else {
+                        bootbox.alert(message);
+                    }
                 }
-                else if (statusCode == 409) {
-                    bootbox.alert(message);
-                }
-                else {
-                    bootbox.alert(message);
-                }
-            }
-        })
+            })
+        }
+        else {
+            bootbox.alert("Please input all required info");
+        }
     }
-
 
     function Delete() {
 
@@ -168,69 +195,90 @@
         })
     }
 
+    $('#frm-submit').validate({
+        rules: {
+            scriptname: { required: true, },
+            scriptrev: { required: true, },
+            firmware: { required: true, },
+            firmwarerev: { required: true, },
+            description: { required: true, },
+            script: { required: true, },
+            encrypted: { required: true, },
+        },
+        //messages: {
+        //    scriptname: { required: "This field is required", },
+        //    scriptrev: { required: "This field is required", },
+        //    firmware: { required: "This field is required", },
+        //    firmwarerev: { required: "This field is required", },
+        //    //description: { required: "This field is required", },
+        //    script: { required: "This field is required", },
+        //    //encrypted: { required: "This field is required", },
+        //}
+    })
     function Submit() {
-
-        var getDate = new Date();
-        var date = getDate.getFullYear().toString() + (getDate.getMonth() + 1) + getDate.getDate() + getDate.getHours() + getDate.getMinutes() + getDate.getSeconds() + getDate.getMilliseconds();
-
-        //var selectedFile = document.getElementById('txt-file2').files[0];
-
-        var script = $('#txt-script')[0].files[0]; // get the File obect
-        var arr_script = script.name.split('.')
-        var len_script = arr_script.length
-        var extension = arr_script[len_script - 1]
-        name_script = arr_script.slice(0, len_script - 1).join('.');
-        name_script += '_' + date + '.' + extension;
+        if ($('#frm-submit').valid()) {
 
 
-        var encripted = $('#txt-encripted')[0].files[0]; // get the File obect
-        var arr_encripted = encripted.name.split('.')
-        var len_encripted = arr_encripted.length
-        var extension = arr_encripted[len_encripted - 1]
-        name_encripted = arr_encripted.slice(0, len_encripted - 1).join('.');
-        name_encripted += '_' + date + '.' + extension;
+            var getDate = new Date();
+            var date = getDate.getFullYear().toString() + (getDate.getMonth() + 1) + getDate.getDate() + getDate.getHours() + getDate.getMinutes() + getDate.getSeconds() + getDate.getMilliseconds();
 
+            //var selectedFile = document.getElementById('txt-file2').files[0];
 
-        var model = new Object();
-        model.ReqId = parseInt($(this).attr('data-reid'));
-        model.TypeId = parseInt($(this).attr('data-typeid'));
-        model.ScriptName = $("#txt-scriptname").val();
-        model.ScriptRev = $('#txt-scriptrev').val();
-        model.Firmware = $('#txt-firmware').val();
-        model.FirmwareRevision = $('#txt-firmwarerev').val();
-        model.Description = $('#txt-description').val();
-        model.UpdatedBy = user
-        model.UpdatedName = name
-        model.UpdatedEmail = email
-        model.ScriptFileName = name_script
-        model.EncriptedFileName = name_encripted
-        model.FileHash = $('#txt-encripted').attr('data-hash-encripted').toUpperCase();
-        debugger
-        $.ajax({
-            type: 'post',
-            url: '/request/Request_submit',
-            dataType: 'json',
-            data: JSON.stringify(model),
-            contentType: 'application/json;charset=uft-8',
-            success: function (response) {
-                var statusCode = response.results.statusCode;
-                var message = response.results.message;
+            var script = $('#txt-script')[0].files[0]; // get the File obect
+            var arr_script = script.name.split('.')
+            var len_script = arr_script.length
+            var extension = arr_script[len_script - 1]
+            name_script = arr_script.slice(0, len_script - 1).join('.');
+            name_script += '_' + date + '.' + extension;
 
-                if (statusCode == 200) {
-                    bootbox.alert(message, function () { location.reload() });
+            var encrypted = $('#txt-encrypted')[0].files[0]; // get the File obect
+            var arr_encrypted = encrypted.name.split('.')
+            var len_encrypted = arr_encrypted.length
+            var extension = arr_encrypted[len_encrypted - 1]
+            name_encrypted = arr_encrypted.slice(0, len_encrypted - 1).join('.');
+            name_encrypted += '_' + date + '.' + extension;
+
+            var model = new Object();
+            model.ReqId = parseInt($(this).attr('data-reid'));
+            model.TypeId = parseInt($(this).attr('data-typeid'));
+            model.ScriptName = $("#txt-scriptname").val();
+            model.ScriptRev = $('#txt-scriptrev').val();
+            model.Firmware = $('#txt-firmware').val();
+            model.FirmwareRevision = $('#txt-firmwarerev').val();
+            model.Description = $('#txt-description').val();
+            model.UpdatedBy = user
+            model.UpdatedName = name
+            model.UpdatedEmail = email
+            model.ScriptFileName = name_script
+            model.EncryptedFileName = name_encrypted
+            model.FileHash = $('#txt-encrypted').attr('data-hash-encrypted').toUpperCase();
+            debugger
+            $.ajax({
+                type: 'post',
+                url: '/request/Request_submit',
+                dataType: 'json',
+                data: JSON.stringify(model),
+                contentType: 'application/json;charset=uft-8',
+                success: function (response) {
+                    var statusCode = response.results.statusCode;
+                    var message = response.results.message;
+
+                    if (statusCode == 200) {
+                        bootbox.alert(message, function () { location.reload() });
+                    }
+                    else if (statusCode == 409) {
+                        bootbox.alert(message);
+                    }
+                    else {
+                        bootbox.alert(message);
+                    }
                 }
-                else if (statusCode == 409) {
-                    bootbox.alert(message);
-                }
-                else {
-                    bootbox.alert(message);
-                }
-            }
-        })
+            })
 
 
-        uploadFile(script, name_script);
-        uploadFile(encripted, name_encripted);
+            uploadFile(script, name_script);
+            uploadFile(encripted, name_encripted);
+        }
     }
 
 
@@ -324,7 +372,7 @@
             type: 'post',
             url: '/request/RequestDetail_get',
             //dataType: 'json',
-            cache:false,
+            cache: false,
             data: JSON.stringify(model),
             contentType: 'application/json;charset=uft-8',
             success: function (response) {

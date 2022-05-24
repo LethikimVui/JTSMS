@@ -45,7 +45,7 @@ namespace API.Controllers
         {
             try
             {
-                await context.Database.ExecuteSqlCommandAsync(SPConfig.WatchDogConfig_insert, model.CustId, model.ProcessStep, model.RouteStep, model.TesterName, model.TesterPcName, model.EquipmentId, model.TestTime, model.CreatedBy, model.CreatedName, model.CreatedEmail);
+                await context.Database.ExecuteSqlCommandAsync(SPConfig.WatchDogConfig_insert, model.CustId, model.ProcessStep, model.RouteStep, model.TesterName, model.TesterPcName, model.EquipmentId, model.PlatformId, model.TestTime, model.Trigger, model.CreatedBy, model.CreatedName, model.CreatedEmail);
                 return Ok(new ResponseResult(200, "WatchDogConfig_insert Added Successfully"));
                 //if (!context.AccessUserRole.Where(x => (x.Ntlogin == model.Ntlogin) && (x.CustId == model.CustId) && (x.IsActive == 1)).ToList().Any())
                 //{

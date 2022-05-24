@@ -21,6 +21,16 @@ namespace Services.Services
             }
             return results;
         }
+        public async Task<List<VRouteStep>> Master_RouteStep_get()
+        {
+            List<VRouteStep> results = new List<VRouteStep>();
+            using (var response = await httpClient.GetAsync("api/common/Master_RouteStep_get/"))
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                results = JsonConvert.DeserializeObject<List<VRouteStep>>(apiResponse);
+            }
+            return results;
+        }
 
         public async Task<List<VCustomer>> Customer_Get()
         {

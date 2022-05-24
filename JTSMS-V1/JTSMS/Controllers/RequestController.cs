@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Services.Interfaces;
+using SharedObjects.Commons;
 using SharedObjects.ValueObjects;
 using SharedObjects.ViewModels;
 using System;
@@ -68,7 +69,15 @@ namespace JTSMS.Controllers
         //}
         public async Task<IActionResult> Request_update([FromBody] RequestViewModel model)
         {
-            var result = await requestService.Request_approve(model);
+            ResponseResult result = new ResponseResult();
+            if (model.Action == "Reject")
+            {
+                result = await requestService.Request_reject(model);
+            }
+            else if (model.Action == "Approve")
+            {
+                 result = await requestService.Request_approve(model);
+            }
             if (result.StatusCode == 200)
             {
                 SentEmail_UpdateStatus(model);
@@ -79,7 +88,11 @@ namespace JTSMS.Controllers
         public async Task<IActionResult> Request_close_deviation([FromBody] RequestViewModel model)
         {
             var result = await requestService.Request_close_deviation(model);
+            if (result.StatusCode == 200)
+            {
             SentEmail_Closure(model);
+
+            }
             return Json(new { results = result });
         }
         public async Task<IActionResult> RequestDetail_get([FromBody] RequestViewModel model)
@@ -87,6 +100,8 @@ namespace JTSMS.Controllers
             ViewData["Customer"] = await commonService.Customer_Get();
             ViewData["Station"] = await commonService.Station_get();
             ViewData["Type"] = await commonService.Type_get();
+            ViewData["RouteStep"] = await commonService.Master_RouteStep_get();
+
             var results = await requestService.RequestDetail_get(model);
             return PartialView(results);
         }
@@ -179,7 +194,7 @@ namespace JTSMS.Controllers
 
         #region Sent Email
         public async void SentEmail(RequestViewModel model)
-        {
+        {            
             string body = string.Empty;
 
             body += "<div style='border - top:3px solid #22BCE5'>Hi,</div>";
@@ -228,8 +243,6 @@ namespace JTSMS.Controllers
             SmtpClient smtp = new SmtpClient("corimc04.corp.JABIL.ORG");
             message.From = new MailAddress("JTSMS@Jabil.com");
 
-
-
             var results = await requestService.RequestDetail_get_by_id(model.ReqId);
             var statusId = results.StatusId;
 
@@ -246,14 +259,13 @@ namespace JTSMS.Controllers
                                 message.To.Add(new MailAddress(email.Email));
                             }
                         }
-                        message.Subject = "[Pending Approval] New Request Is Pending Approval";
+                        message.Subject = "[Pending Approval] Request Is Pending Approval";
                     }
                     break;
                 case 3: //rejected
                     var request_detail = await requestService.RequestDetail_get_by_id(model.ReqId);
                     message.To.Add(new MailAddress(request_detail.CreatedEmail));
-                    message.Subject = "[Rejected] Ticket is rejected";
-
+                    message.Subject = "[Rejected] Request is rejected";
                     break;
                 case 4: // approved
                     var UserRole_Get_By_ScriptId = await requestService.Access_UserRole_Get_By_ScriptId(model);
@@ -266,7 +278,7 @@ namespace JTSMS.Controllers
                                 message.To.Add(new MailAddress(email.UserEmail));
                             }
                         }
-                        message.Subject = "[Closed] Ticket is approved and closed";
+                        message.Subject = "[Closed] Request is approved and closed";
                     }
                     break;
                 default:
@@ -288,8 +300,6 @@ namespace JTSMS.Controllers
             smtp.Send(message);
         }
         #endregion
-
-
         #region SentEmail_Closure
         public async void SentEmail_Closure(RequestViewModel model)
         {

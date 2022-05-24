@@ -49,6 +49,12 @@ namespace API.Controllers
         {
             var results = await context.Query<VType>().AsNoTracking().FromSql(SPCommon.Type_get).ToListAsync();
             return results;
+        } [HttpGet("Master_RouteStep_get")]
+        [Obsolete]
+        public async Task<List<VRouteStep>> Master_RouteStep_get()
+        {
+            var results = await context.Query<VRouteStep>().AsNoTracking().FromSql(SPCommon.Master_RouteStep_get).ToListAsync();
+            return results;
         } 
         [HttpGet("Access_UserRole_Get_By_ScriptId/{scriptId}")]
         [Obsolete]

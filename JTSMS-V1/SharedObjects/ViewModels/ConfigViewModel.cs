@@ -11,6 +11,7 @@ namespace SharedObjects.ViewModels
     {
         public int WdconfigId { get; set; }
         public int CustId { get; set; }
+        public int PlatformId { get; set; }
         public string ProcessStep { get; set; }
         public string RouteStep { get; set; }
         public string AssyNumber { get; set; }
@@ -20,6 +21,7 @@ namespace SharedObjects.ViewModels
         public int EquipmentId { get; set; }
         public int TestTime { get; set; }
         public int IsDmz { get; set; }
+        public int Trigger { get; set; }
         public int IsActive { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedName { get; set; }
