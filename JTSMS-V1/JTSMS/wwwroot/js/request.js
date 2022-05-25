@@ -111,7 +111,7 @@
 
         customer = parseInt($("#txt-customer").val());
         station = parseInt($("#txt-station").val());
-        route = parseInt($("#txt-route").val());
+        route = $("#txt-route").val();
         type = parseInt($("#txt-type").val());
         platform = parseInt($("#txt-platform").val());
         assy = $('#txt-assy').val() ? $('#txt-assy').val() : null;
@@ -120,7 +120,7 @@
             var model = new Object();
             model.CustId = customer;
             model.StationId = station;
-            model.RouteId = route;
+            model.RouteStep = route;
             model.TypeId = type;
             model.PlatformId = platform;
             model.AssemblyNumber = assy;
@@ -161,12 +161,12 @@
     function Delete() {
 
         var model = new Object();
-        model.CustId = parseInt($("#txt-customer").val());
-        model.StationId = parseInt($("#txt-station").val());
-        model.TypeId = parseInt($("#txt-type").val());
-        model.PlatformId = parseInt($("#txt-platform").val());
-        model.AssemblyNumber = $('#txt-assy').val() ? $('#txt-assy').val() : null;
-        model.AssemblyRevision = $('#txt-rev').val() ? $('#txt-rev').val() : null;
+        //model.CustId = parseInt($("#txt-customer-search").val());
+        //model.StationId = parseInt($("#txt-station-search").val());
+        //model.TypeId = parseInt($("#txt-type").val());
+        //model.PlatformId = parseInt($("#txt-platform").val());
+        //model.AssemblyNumber = $('#txt-assy').val() ? $('#txt-assy').val() : null;
+        //model.AssemblyRevision = $('#txt-rev').val() ? $('#txt-rev').val() : null;
         model.ReqId = parseInt($(this).attr('data-reqid'));
         model.UpdatedBy = user;
         model.UpdatedName = name;
@@ -380,6 +380,5 @@
             }
         })
     }
-
-
+  
 })

@@ -3,7 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
+  <Target Name="resolveInteropOutputPath" BeforeTargets="ResolveComReferences" Condition="'@(COMReference)'!='' or '@(COMFileReference)'!=''">
+    <PropertyGroup Condition=" '$(InteropOutputPath)' == '' ">
+      <InteropOutputPath>$(MSBuildProjectDirectory)\$(IntermediateOutputPath)</InteropOutputPath>
+    </PropertyGroup>
+  </Target>
   <ItemGroup>
     <COMReference Include="JEMS_3">
       <WrapperTool>tlbimp</WrapperTool>
@@ -31,6 +35,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.24" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.17.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="System.Data.OleDb" Version="5.0.0" />
     <PackageReference Include="System.DirectoryServices" Version="6.0.0" />
     <PackageReference Include="System.DirectoryServices.AccountManagement" Version="6.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.17.0" />

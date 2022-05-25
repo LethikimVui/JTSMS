@@ -12,6 +12,7 @@ namespace SharedObjects.ViewModels
         public int TtId { get; set; }
         public int ReqId { get; set; }
         public int RouteId { get; set; }
+        public string RouteStep { get; set; }
         public string ReqNumber { get; set; }
         public int? CustId { get; set; }
         public int? StationId { get; set; }

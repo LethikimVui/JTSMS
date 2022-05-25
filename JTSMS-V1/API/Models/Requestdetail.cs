@@ -34,6 +34,6 @@ namespace API.Models
         public int? PlatformId { get; set; }
         public string ScriptFileName { get; set; }
         public string EncriptedFileName { get; set; }
-        public int RouteStepId { get; set; }
+        public string RouteStep { get; set; }
     }
 }

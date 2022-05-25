@@ -8,11 +8,14 @@ using SharedObjects.ValueObjects;
 using SharedObjects.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using System.Data.OleDb;
+using JTSMS.Models;
 
 namespace JTSMS.Controllers
 {
@@ -23,6 +26,8 @@ namespace JTSMS.Controllers
         private readonly IRequestService requestService;
         private readonly ICommonService commonService;
         private readonly IConfiguration configuration;
+
+        private ADODB.Recordset rs = new ADODB.Recordset();
 
         public RequestController(IRequestService requestService, ICommonService commonService, IConfiguration configuration)
         {
@@ -76,7 +81,7 @@ namespace JTSMS.Controllers
             }
             else if (model.Action == "Approve")
             {
-                 result = await requestService.Request_approve(model);
+                result = await requestService.Request_approve(model);
             }
             if (result.StatusCode == 200)
             {
@@ -90,22 +95,64 @@ namespace JTSMS.Controllers
             var result = await requestService.Request_close_deviation(model);
             if (result.StatusCode == 200)
             {
-            SentEmail_Closure(model);
+                SentEmail_Closure(model);
 
             }
             return Json(new { results = result });
         }
         public async Task<IActionResult> RequestDetail_get([FromBody] RequestViewModel model)
         {
+            OleDbDataAdapter dataAdapter = new OleDbDataAdapter();
+            DataTable dt = new DataTable();
+            JEMS_3.CR_RouteSteps CRr = new JEMS_3.CR_RouteSteps();
+            rs = CRr.ListByFactoryText("VNHCMM0MSSQLV1A", "JEMS", 7022);
+            //rs.Filter = "Step_ID='10'";
+
+            dataAdapter.Fill(dt, rs);
+            List<Recordset> lst = new List<Recordset>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                Recordset t = new Recordset()
+                {
+                    //RouteStep_ID = int.Parse(dt.Rows[i]["RouteStep_ID"].ToString()),
+                    DescrText = dt.Rows[i]["DescrText"].ToString(),
+                    //Descr = dt.Rows[i]["Descr"].ToString(),
+                    Step_ID = Int32.Parse(dt.Rows[i]["Step_ID"].ToString()),
+                    //RouteText = dt.Rows[i]["RouteText"].ToString(),
+                };
+                lst.Add(t);
+            }
+            //var lst1 = lst.Where(s => s.Step_ID == 10 || s.Step_ID == 12).Select(r => new Recordset { Step_ID = r.Step_ID, DescrText = r.DescrText}).Distinct().ToList();
+            var lst1 = lst.Where(s => s.Step_ID == 10 || s.Step_ID == 12).ToList();
+            lst1.ForEach(Console.WriteLine);
             ViewData["Customer"] = await commonService.Customer_Get();
             ViewData["Station"] = await commonService.Station_get();
             ViewData["Type"] = await commonService.Type_get();
-            ViewData["RouteStep"] = await commonService.Master_RouteStep_get();
+            ViewData["RouteStep"] = lst1; //await commonService.Master_RouteStep_get();
 
             var results = await requestService.RequestDetail_get(model);
             return PartialView(results);
         }
+        public List<string> DescrText(string step_ID)
+        {
+            OleDbDataAdapter dataAdapter = new OleDbDataAdapter();
+            DataTable dt = new DataTable();
+            JEMS_3.CR_RouteSteps CRr = new JEMS_3.CR_RouteSteps();
+            rs = CRr.ListByFactoryText("VNHCMM0MSSQLV1A", "JEMS", 7022);
+            rs.Filter = "Step_ID ='" + step_ID + "'";
 
+            dataAdapter.Fill(dt, rs);
+            List<string> lst = new List<string>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+               var DescrText = dt.Rows[i]["DescrText"].ToString();                   
+                lst.Add(DescrText);
+            }
+            //var lst1 = lst.Where(s => s.Step_ID == 10 || s.Step_ID == 12).Select(r => new Recordset { Step_ID = r.Step_ID, DescrText = r.DescrText}).Distinct().ToList();
+            var lst1 = lst.Distinct().ToList();
+            lst1.Sort();
+            return lst1;
+        }
         public async Task<IActionResult> RequestDetail_get_by_id(int reqId)
         {
             var results = await requestService.RequestDetail_get_by_id(reqId);
@@ -194,7 +241,7 @@ namespace JTSMS.Controllers
 
         #region Sent Email
         public async void SentEmail(RequestViewModel model)
-        {            
+        {
             string body = string.Empty;
 
             body += "<div style='border - top:3px solid #22BCE5'>Hi,</div>";

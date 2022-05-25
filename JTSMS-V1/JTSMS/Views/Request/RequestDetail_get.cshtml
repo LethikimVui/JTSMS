@@ -4,12 +4,11 @@
     var customers = ViewData["Customer"] as IEnumerable<SharedObjects.ValueObjects.VCustomer>;
     var Station = ViewData["Station"] as IEnumerable<SharedObjects.ValueObjects.VStation>;
     var Type = ViewData["Type"] as IEnumerable<SharedObjects.ValueObjects.VType>;
-    var RouteStep = ViewData["RouteStep"] as IEnumerable<SharedObjects.ValueObjects.VRouteStep>;
+    //var RouteStep = ViewData["RouteStep"] as IEnumerable<SharedObjects.ValueObjects.VRouteStep>;
+    var RouteStep = ViewData["RouteStep"] as IEnumerable<JTSMS.Models.Recordset>;
 }
 
 <form id="frm-add-1">
-
-
     <table class="table table-bordered table-hover table-striped table-responsive">
         <thead>
             <tr class="text-center bold">
@@ -40,26 +39,33 @@
                         <option value="">Please Select</option>
                         @foreach (var item in customers.OrderByDescending(c => c.CustId).ToList())
                         {
-                            <option value=@item.CustId>@item.CustName</option>
+                        <option value=@item.CustId>@item.CustName</option>
                         }
                     </select>
                 </td>
                 <td>
-                    <select class="form-control" id="txt-station" name="station" style="height: 34px !important; color: mediumvioletred">
+                    <select class="form-control" id="txt-station" name="station" style="height: 34px !important; color: mediumvioletred" onchange="fncOnChangeStation(this)">
                         <option value="">Please Select</option>
                         @foreach (var item in Station.OrderByDescending(c => c.Station).ToList())
                         {
-                            <option value=@item.StepId>@item.Station</option>
+                        <option value=@item.StepId>@item.Station</option>
                         }
                     </select>
                 </td>
                 <td>
                     <select class="form-control" id="txt-route" name="route" style="height: 34px !important; color: mediumvioletred">
                         <option value="">Please Select</option>
-                        @foreach (var item in RouteStep.OrderByDescending(c => c.RouteStepId).ToList())
-                        {
-                            <option value=@item.RouteStepId>@item.RouteStep</option>
-                        }
+                        @*@foreach (var item in RouteStep.OrderByDescending(c => c.RouteStepId).ToList())
+                            {
+                                <option value=@item.RouteStepId>@item.RouteStep</option>
+                            }*@
+                        @*@foreach (var item in RouteStep.Select(s => new { s.DescrText }).Distinct().OrderByDescending(s => s.DescrText).ToList())
+                            {
+                                <option value=@item.DescrText>@item.DescrText</option>
+                            }*@
+
+                        <option value="">--Please Select--</option>
+
                     </select>
                 </td>
                 <td>
@@ -73,7 +79,7 @@
                         <option value="">--Please Select--</option>
                         @foreach (var item in Type.OrderByDescending(c => c.TypeId).ToList())
                         {
-                            <option value=@item.TypeId>@item.Type</option>
+                        <option value=@item.TypeId>@item.Type</option>
                         }
                     </select>
                 </td>
@@ -90,7 +96,6 @@
                     <td></td>
                     <td></td>*@
                 <td></td>
-
                 <td>
                     <input id="txt-description" type="text" class="form-control" style="height:30px" />
                 </td>
@@ -102,31 +107,30 @@
 
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>@item.ReqId</td>
-                    <td>@item.CustName</td>
-                    <td>@item.Station</td>
-                    <td>@item.routeStepId</td>
-                    <td>@item.AssemblyNumber</td>
-                    <td>@item.AssemblyRevision</td>
-                    <td>@item.Type</td>
-                    <td>@item.Platform</td>
-                    <td>@item.ScriptId</td>
-                    @*<td>@item.ScriptName</td>
-                        <td>@item.ScriptRev</td>
-                        <td>@item.FileHash</td>
-                        <td>@item.Firmware</td>
-                        <td>@item.FirmwareRevision</td>*@
+            <tr>
+                <td>@item.ReqId</td>
+                <td>@item.CustName</td>
+                <td>@item.Station</td>
+                <td>@item.routeStepId</td>
+                <td>@item.AssemblyNumber</td>
+                <td>@item.AssemblyRevision</td>
+                <td>@item.Type</td>
+                <td>@item.Platform</td>
+                <td>@item.ScriptId</td>
+                @*<td>@item.ScriptName</td>
+                    <td>@item.ScriptRev</td>
+                    <td>@item.FileHash</td>
+                    <td>@item.Firmware</td>
+                    <td>@item.FirmwareRevision</td>*@
 
-                    <td>@item.Description</td>
-                    <td style="background-color:@item.StatusColour">@item.StatusName</td>
-                    <td class="text-center">
+                <td>@item.Description</td>
+                <td style="background-color:@item.StatusColour">@item.StatusName</td>
+                <td class="text-center">
+                    <a id="btn-edit" class="btn default btn-xs purple" data-reqId="@item.ReqId" target="_blank" href="@Url.Action("RequestDetail_get_by_id","Request", new { reqid = item.ReqId})" title="Edit"> <span class="glyphicon glyphicon-list-alt"></span></a>
+                    <a id="btn-delete" class="btn default btn-xs purple" data-reqId="@item.ReqId" title="Remove"> <span class="glyphicon glyphicon-remove"></span></a>
 
-                        <a id="btn-edit" class="btn default btn-xs purple" data-reqId="@item.ReqId" target="_blank" href="@Url.Action("RequestDetail_get_by_id","Request", new { reqid = item.ReqId})" title="Edit"> <span class="glyphicon glyphicon-list-alt"></span></a>
-                        <a id="btn-delete" class="btn default btn-xs purple" data-reqId="@item.ReqId" title="Remove"> <span class="glyphicon glyphicon-remove"></span></a>
-
-                    </td>
-                </tr>
+                </td>
+            </tr>
             }
 
         </tbody>

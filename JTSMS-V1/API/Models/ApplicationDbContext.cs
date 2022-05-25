@@ -243,10 +243,9 @@ namespace API.Models
                     .HasColumnName("reqNumber")
                     .HasMaxLength(45);
 
-                entity.Property(e => e.RouteStepId)
+                entity.Property(e => e.RouteStep)
                     .HasColumnName("routeStepId")
-                     .HasColumnType("int(11)");
-
+                    .HasMaxLength(45);
                 entity.Property(e => e.ScriptFileName)
                     .HasColumnName("scriptFileName")
                     .HasMaxLength(255);

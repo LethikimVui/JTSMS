@@ -29,14 +29,14 @@ namespace API.Controllers
         {
             try
             {
-                var list = context.Requestdetail.Where(s => s.CustId == model.CustId && s.StationId == model.StationId && s.RouteStepId == model.RouteId && s.AssemblyNumber == model.AssemblyNumber && s.AssemblyRevision == model.AssemblyRevision && s.PlatformId == model.PlatformId && s.IsActive).ToList();
+                var list = context.Requestdetail.Where(s => s.CustId == model.CustId && s.StationId == model.StationId && s.RouteStep == model.RouteStep && s.AssemblyNumber == model.AssemblyNumber && s.AssemblyRevision == model.AssemblyRevision && s.PlatformId == model.PlatformId && s.IsActive).ToList();
                 var t = list.Where(s => s.StatusId == 2);
 
                 if (model.TypeId == 1)// New
                 {
                     if (!list.Where(s => s.TypeId == 1).Any())
                     {
-                        await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_add, model.CustId, model.StationId, model.RouteId, model.TypeId, model.PlatformId, model.AssemblyNumber, model.AssemblyRevision, model.Description, model.CreatedBy, model.CreatedName, model.CreatedEmail);
+                        await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_add, model.CustId, model.StationId, model.RouteStep, model.TypeId, model.PlatformId, model.AssemblyNumber, model.AssemblyRevision, model.Description, model.CreatedBy, model.CreatedName, model.CreatedEmail);
                         return Ok(new ResponseResult(200, "New Request added"));
                     }
                     else
@@ -49,7 +49,7 @@ namespace API.Controllers
 
                     if (!list.Where(s => s.TypeId == model.TypeId).Any() && list.Where(s => s.StatusId == 4 && s.TypeId == 1).Any())
                     {
-                        await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_add, model.CustId, model.StationId, model.RouteId, model.TypeId, model.PlatformId, model.AssemblyNumber, model.AssemblyRevision, model.Description, model.CreatedBy, model.CreatedName, model.CreatedEmail);
+                        await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_add, model.CustId, model.StationId, model.RouteStep, model.TypeId, model.PlatformId, model.AssemblyNumber, model.AssemblyRevision, model.Description, model.CreatedBy, model.CreatedName, model.CreatedEmail);
                         return Ok(new ResponseResult(200, "Request PCN / Deviation added"));
                     }
                     else if (list.Where(s => s.TypeId == model.TypeId).Any())
