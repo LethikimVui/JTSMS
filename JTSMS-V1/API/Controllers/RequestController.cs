@@ -29,7 +29,7 @@ namespace API.Controllers
         {
             try
             {
-                var list = context.Requestdetail.Where(s => s.CustId == model.CustId && s.StationId == model.StationId && s.RouteStep == model.RouteStep && s.AssemblyNumber == model.AssemblyNumber && s.AssemblyRevision == model.AssemblyRevision && s.PlatformId == model.PlatformId && s.IsActive).ToList();
+                var list = context.Requestdetail.Where(s => s.CustId == model.CustId && s.StationId == model.StationId && s.RouteStepId == model.RouteStep && s.AssemblyNumber == model.AssemblyNumber && s.AssemblyRevision == model.AssemblyRevision && s.PlatformId == model.PlatformId && s.IsActive).ToList();
                 var t = list.Where(s => s.StatusId == 2);
 
                 if (model.TypeId == 1)// New
@@ -74,8 +74,8 @@ namespace API.Controllers
         {
             try
             {
-                await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_submit, model.ReqId, model.TypeId, model.ScriptName, model.ScriptRev, model.Firmware, model.FirmwareRevision, model.FileHash, model.ScriptFileName, model.EncryptedFileName, model.Description, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
-                return Ok(new ResponseResult(200, "Request is submitted, you can use the script ID in your program"));
+                await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_submit, model.ReqId, model.TypeId, model.ScriptName, model.ScriptRev, model.PcnorDevNumber, model.ChangeDetail, model.Firmware, model.FirmwareRevision, model.FileHash, model.ScriptFileName, model.EncryptedFileName, model.Description, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
+                return Ok(new ResponseResult(200, "Request is submitted, you need to get it approved to use in testscript"));
             }
             catch (Exception ex)
             {
@@ -110,21 +110,21 @@ namespace API.Controllers
                 return BadRequest(new ResponseResult(400, ex.Message));
             }
         }
-        //[HttpPost("Request_close")]
-        //[Obsolete]
-        //public async Task<IActionResult> Request_close([FromBody] RequestViewModel model)
-        //{
-        //    try
-        //    {
-        //        await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_close, model.ReqId, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
-        //        return Ok(new ResponseResult(200, "Request_close"));
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpPost("Request_close")]
+        [Obsolete]
+        public async Task<IActionResult> Request_close([FromBody] RequestViewModel model)
+        {
+            try
+            {
+                await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_close, model.ReqId, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
+                return Ok(new ResponseResult(200, "Deviation is closed, please get your team to updated the Script Id"));
+            }
+            catch (Exception ex)
+            {
 
-        //        return BadRequest(new ResponseResult(400, ex.Message));
-        //    }
-        //} 
+                return BadRequest(new ResponseResult(400, ex.Message));
+            }
+        }
         [HttpPost("Request_close_deviation")]
         [Obsolete]
         public async Task<IActionResult> Request_close_deviation([FromBody] RequestViewModel model)
@@ -132,7 +132,7 @@ namespace API.Controllers
             try
             {
                 await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_close_deviation, model.ReqId, model.Remark, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
-                return Ok(new ResponseResult(200, "The Deviation is closed! Please change the script ID to run in production"));
+                return Ok(new ResponseResult(200, "The Deviation Closure is submmited"));
             }
             catch (Exception ex)
             {

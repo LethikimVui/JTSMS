@@ -56,11 +56,11 @@
 
                     </div>
                     <div class="form-group col-md-2 pull-left">
-                        <label class="text-center bold font-green-sharp" for="">CreationDate</label>
+                        <label class="text-center bold font-green-sharp" for="">Creation Date</label>
                         <input class="form-control" value="@Model.creationDate" readonly />
                     </div>
                     <div class="form-group col-md-2 pull-left">
-                        <label class="text-center bold font-green-sharp" for="">CreatedBy</label>
+                        <label class="text-center bold font-green-sharp" for="">Created By</label>
                         <input class="form-control" value="@Model.CreatedName" readonly />
                     </div>
                     <div class="form-group col-md-2 pull-left">
@@ -69,51 +69,75 @@
                     </div>
                     @if (Model.StatusId == 1)
                     {
-                <form id="frm-submit">
+                        <form id="frm-submit">
 
 
-                    <div class="form-group col-md-2 pull-left">
-                        <label class="text-center bold font-green-sharp" for="">ScriptName</label>
-                        <input id="txt-scriptname" name="scriptname" type="text" class="form-control" value="@Model.ScriptName" />
-                    </div>
-                    <div class="form-group col-md-2 pull-left">
-                        <label class="text-center bold font-green-sharp" for="">ScriptRev</label>
-                        <input id="txt-scriptrev"  name="scriptrev" type="text" class="form-control" value="@Model.ScriptRev" />
-                    </div>
-                    <div class="form-group col-md-2 pull-left">
-                        <label class="text-center bold font-green-sharp" for="">Firmware</label>
-                        <input id="txt-firmware"  name="firmware" type="text" class="form-control" value="@Model.Firmware" />
-                    </div>
-                    <div class="form-group col-md-2 pull-left">
-                        <label class="text-center bold font-green-sharp" for="">Firmware Revision</label>
-                        <input id="txt-firmwarerev"  name="firmwarerev" type="text" class="form-control" value="@Model.FirmwareRevision" />
-                    </div>
-                    <div class="form-group col-md-4 pull-left">
-                        <label class="text-center bold font-green-sharp" for="">Description</label>
-                        <input id="txt-description"  name="description" type="text" class="form-control" value="@Model.Description" />
-                    </div>
-                    <div class="form-group col-md-4 pull-left">
-                        <label class="text-center bold font-green-sharp" for="">OriginalScript</label>
-                        <input id="txt-script"  name="script" type="file" class="form-control" accept=".jts" />
-                    </div>
-                    <div class="form-group col-md-4 pull-left">
-                        <label class="text-center bold font-green-sharp" for="">Encrypted</label>
-                        <input id="txt-encrypted"  name="encrypted" type="file" class="form-control" accept=".jts_encrypted" />
-                    </div>
-                    <div class="form-group col-md-12">
-                        <a class="btn btn-success" id="btn-submit" data-reid="@Model.ReqId" data-typeid="@Model.TypeId">Submit</a>
-                    </div>
-                </form>
+                            <div class="form-group col-md-2 pull-left">
+                                <label class="text-center bold font-green-sharp" for="">Script Name</label>
+                                <input id="txt-scriptname" name="scriptname" type="text" class="form-control" value="@Model.ScriptName" />
+                            </div>
+                            <div class="form-group col-md-2 pull-left">
+                                <label class="text-center bold font-green-sharp" for="">Script Revision</label>
+                                <input id="txt-scriptrev" name="scriptrev" type="text" class="form-control" value="@Model.ScriptRev" />
+                            </div>
+                            <div class="form-group col-md-2 pull-left">
+                                <label class="text-center bold font-green-sharp" for="">Firmware</label>
+                                <input id="txt-firmware" name="firmware" type="text" class="form-control" value="@Model.Firmware" />
+                            </div>
+                            <div class="form-group col-md-2 pull-left">
+                                <label class="text-center bold font-green-sharp" for="">Firmware File Path</label>
+                                <input id="txt-firmwarerev" name="firmwarerev" type="text" class="form-control" value="@Model.FirmwareRevision" />
+                            </div>
+                            <div class="form-group col-md-4 pull-left">
+                                <label class="text-center bold font-green-sharp" for="">Description</label>
+                                <input id="txt-description" name="description" type="text" class="form-control" value="@Model.Description" />
+                            </div>
+
+                            <div class="form-group col-md-4 pull-left">
+                                <label class="text-center bold font-green-sharp" for="">Original Script</label>
+                                <input id="txt-script" name="script" type="file" class="form-control" accept=".jts" />
+                            </div>
+                            <div class="form-group col-md-4 pull-left">
+                                <label class="text-center bold font-green-sharp" for="">Encrypted Script</label>
+                                <input id="txt-encrypted" name="encrypted" type="file" class="form-control" accept=".jts_encrypted" />
+                            </div>
+
+                            @if (Model.TypeId != 1)
+                            {
+                                <div class="form-group col-md-4 pull-left">
+                                    <label class="text-center bold font-green-sharp" for="">PCN or Dev Number</label>
+                                    <input id="txt-PCNorDevNumber" name="PCNorDevNumber" type="text" class="form-control" />
+                                </div>
+                                <div class="form-group col-md-4 pull-left">
+                                    <label class="text-center bold font-green-sharp" for="">From</label>
+                                    <input id="txt-from" name="from" type="date" class="form-control" />
+                                </div>
+                                <div class="form-group col-md-4 pull-left">
+                                    <label class="text-center bold font-green-sharp" for="">To</label>
+                                    <input id="txt-to" name="to" type="date" class="form-control" />
+                                </div>
+                                <button type="button" id="test">Test</button>
+                            }
+                            <div class="form-group col-md-12 pull-left">
+                                <label class="text-center bold font-green-sharp" for="">Change Detail</label>
+                                @*  <input id="txt-description" name="changeDetail" type="text" class="form-control" value="@Model.Description" />*@
+                                <textarea id="txt-changeDetail" class="cell" rows="6" cols="40"></textarea>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <a class="btn btn-success" id="btn-submit" data-reid="@Model.ReqId" data-typeid="@Model.TypeId">Submit</a>
+                            </div>
+                        </form>
+
                     }
                     else
                     {
                         <div class="form-group col-md-2 pull-left">
-                            <label class="text-center bold font-green-sharp" for="">ScriptName</label>
+                            <label class="text-center bold font-green-sharp" for="">Script Name</label>
                             <input class="form-control" value="@Model.ScriptName" readonly />
 
                         </div>
                         <div class="form-group col-md-2 pull-left">
-                            <label class="text-center bold font-green-sharp" for="">ScriptRev</label>
+                            <label class="text-center bold font-green-sharp" for="">Script Revision</label>
                             <input class="form-control" value="@Model.ScriptRev" readonly />
 
                         </div>
@@ -123,29 +147,42 @@
 
                         </div>
                         <div class="form-group col-md-2 pull-left">
-                            <label class="text-center bold font-green-sharp" for="">Firmware Revision</label>
+                            <label class="text-center bold font-green-sharp" for="">Firmware File Path</label>
                             <input class="form-control" value="@Model.FirmwareRevision" readonly />
 
                         </div>
 
                         <div class="form-group col-md-4 pull-left">
-                            <label class="text-center bold font-green-sharp" for="">FileHash</label>
+                            <label class="text-center bold font-green-sharp" for="">File Hash</label>
                             <input class="form-control" value="@Model.FileHash" readonly />
 
                         </div>
-                        <div class="form-group col-md-4 pull-left">
-                            <label class="text-center bold font-green-sharp" for="">ScriptFileName</label>
-                            <a class="wrapper" href="@Url.Action("DownloadFile", "Request", new { fileName = @Model.ScriptFileName })">@Model.ScriptFileName</a>
-                        </div>
-                        <div class="form-group col-md-4 pull-left">
-                            <label class="text-center bold font-green-sharp" for="">EncryptedFileName</label>
+                        @if (Model.TypeId != 1)
+                        {
+                            <div class="form-group col-md-2 pull-left">
+                                <label class="text-center bold font-green-sharp" for="">PCN or Dev Number</label>
+                                <input class="form-control" value="@Model.PcnorDevNumber" readonly />
+                            </div>
+                        }
+                        <div class="form-group col-md-2 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">Change Detail</label>
+                            <input class="form-control" value="@Model.ChangeDetail" readonly />
 
-                            <a class="wrapper" href="@Url.Action("DownloadFile", "Request", new { fileName = @Model.EncriptedFileName })">@Model.EncriptedFileName</a>
                         </div>
                         <div class="form-group col-md-4 pull-left">
                             <label class="text-center bold font-green-sharp" for="">Description</label>
                             <input class="form-control" value="@Model.Description" readonly />
                         </div>
+                        <div class="form-group col-md-4 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">Script File Name</label>
+                            <a class="wrapper" href="@Url.Action("DownloadFile", "Request", new { fileName = @Model.ScriptFileName })">@Model.ScriptFileName</a>
+                        </div>
+                        <div class="form-group col-md-4 pull-left">
+                            <label class="text-center bold font-green-sharp" for="">Encrypted File Name</label>
+
+                            <a class="wrapper" href="@Url.Action("DownloadFile", "Request", new { fileName = @Model.EncriptedFileName })">@Model.EncriptedFileName</a>
+                        </div>
+
                         @if (Approval_get_current.Where(s => s.NTLogin == User.GetSpecificClaim("Ntlogin")).Any())
                         {
                             <div class="form-group col-md-12 pull-left">
@@ -166,17 +203,17 @@
                             </thead>
                             <tbody>
                                 @foreach (var item in Approval_get.GroupBy(u => u.RouteName)  // group by RouteName
-                                         .Select(g => new VApproval   // select values
-                                                      {
-                                             RouteName = g.First().RouteName,
-                                             IsClosed = g.First().IsClosed,
-                                             UpdateDate = g.First().UpdateDate,
-                                             UpdatedName = g.First().UpdatedName,
-                                             Remarks = g.First().Remarks,
-                                             Name = string.Join(", ", g.Select(u => u.Name)),
-                                             Email = string.Join(", ", g.Select(u => u.Email))
-                                         })
-                                         .ToList())
+                                    .Select(g => new VApproval   // select values
+                                                     {
+                                        RouteName = g.First().RouteName,
+                                        IsClosed = g.First().IsClosed,
+                                        UpdateDate = g.First().UpdateDate,
+                                        UpdatedName = g.First().UpdatedName,
+                                        Remarks = g.First().Remarks,
+                                        Name = string.Join(", ", g.Select(u => u.Name)),
+                                        Email = string.Join(", ", g.Select(u => u.Email))
+                                    })
+                                    .ToList())
                                 {
                                     <tr>
                                         <td>@item.RouteName</td>
@@ -196,6 +233,8 @@
                                         <td>@item.Remarks</td>
                                     </tr>
                                 }
+
+
                             </tbody>
                         </table>
 
@@ -211,8 +250,22 @@
                         }
                         if (Model.StatusId == 4 && Model.TypeId == 2 && User.GetSpecificClaim("Ntlogin") == "1099969")
                         {
+                            <div class="form-group col-md-12 pull-left">
+                                <label class="text-center bold font-green-sharp" for="">Remark</label>
+                                <input class="form-control" id="txt-remark-deviation" />
+                            </div>
                             <div class="form-group col-md-1">
                                 <a class="btn btn-success" id="btn-close" data-reqid="@Model.ReqId">Close Deviation</a>
+                            </div>
+                        }
+                        if (Model.StatusId == 5 && Model.TypeId == 2 && User.GetSpecificClaim("Ntlogin") == "1099969")
+                        {
+                            <div class="form-group col-md-12 pull-left">
+                                <label class="text-center bold font-green-sharp" for="">Remark</label>
+                                <input class="form-control" id="txt-remark-deviation" />
+                            </div>
+                            <div class="form-group col-md-1">
+                                <a class="btn btn-success" id="btn-close-approval" data-reqid="@Model.ReqId">Approval To Close Deviation</a>
                             </div>
                         }
                     }

@@ -19,6 +19,7 @@ namespace SharedObjects.ViewModels
         public string TesterName { get; set; }
         public string TesterPcName { get; set; }
         public int EquipmentId { get; set; }
+        public string Equipment { get; set; }
         public int TestTime { get; set; }
         public int IsDmz { get; set; }
         public int Trigger { get; set; }

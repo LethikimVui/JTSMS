@@ -20,7 +20,16 @@ namespace API.Models
         public string Scriptrev { get; set; }
         public string Description { get; set; }
         public string Filehash { get; set; }
-        public int StatusId { get; set; }
+        public int? TypeId { get; set; }
+        public string PcnorDevNumber { get; set; }
+        public string ChangeDetail { get; set; }
+        public int? StatusId { get; set; }
+        public string Firmware { get; set; }
+        public string FirmwareRevision { get; set; }
+        public int? PlatformId { get; set; }
+        public string ScriptFileName { get; set; }
+        public string EncriptedFileName { get; set; }
+        public string RouteStepId { get; set; }
         public bool IsActive { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedName { get; set; }
@@ -28,12 +37,5 @@ namespace API.Models
         public string UpdatedBy { get; set; }
         public string UpdatedName { get; set; }
         public string UpdatedEmail { get; set; }
-        public int? TypeId { get; set; }
-        public string Firmware { get; set; }
-        public string FirmwareRevision { get; set; }
-        public int? PlatformId { get; set; }
-        public string ScriptFileName { get; set; }
-        public string EncriptedFileName { get; set; }
-        public string RouteStep { get; set; }
     }
 }

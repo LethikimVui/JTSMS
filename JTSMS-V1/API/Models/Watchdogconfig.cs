@@ -16,10 +16,13 @@ namespace API.Models
         public string AssyNumber { get; set; }
         public string AssyRev { get; set; }
         public string TesterName { get; set; }
-        public string TesterPcName { get; set; }
+        public string TesterPcname { get; set; }
         public int? EquipmentId { get; set; }
+        public string EquipmentName { get; set; }
+        public int? PlatFormId { get; set; }
         public int? TestTime { get; set; }
         public int? IsDmz { get; set; }
         public int? IsActive { get; set; }
+        public int? IsWatchDogTrigger { get; set; }
     }
 }

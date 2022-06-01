@@ -5,7 +5,7 @@
     var Station = ViewData["Station"] as IEnumerable<SharedObjects.ValueObjects.VStation>;
     var Type = ViewData["Type"] as IEnumerable<SharedObjects.ValueObjects.VType>;
     //var RouteStep = ViewData["RouteStep"] as IEnumerable<SharedObjects.ValueObjects.VRouteStep>;
-    var RouteStep = ViewData["RouteStep"] as IEnumerable<JTSMS.Models.Recordset>;
+   // var RouteStep = ViewData["RouteStep"] as IEnumerable<JTSMS.Models.Recordset>;
 }
 
 <form id="frm-add-1">
@@ -21,11 +21,6 @@
                 <th>Type</th>
                 <th>Platform</th>
                 <th>Test Script Id</th>
-                @*<th>ScriptName</th>
-                    <th>ScriptRev</th>
-                    <th>FileHash</th>
-                    <th>Firmware</th>
-                    <th>Firmware Revision</th>*@
                 <th>Description</th>
                 <th>Status</th>
                 <th>Modification</th>
@@ -35,7 +30,7 @@
             <tr class="text-center">
                 <td>New</td>
                 <td>
-                    <select class="form-control" id="txt-customer" name="customer" required>
+                    <select class="form-control" id="txt-customer" name="customer" required onchange="fncOnChangeCustomer()">
                         <option value="">Please Select</option>
                         @foreach (var item in customers.OrderByDescending(c => c.CustId).ToList())
                         {
@@ -54,7 +49,6 @@
                 </td>
                 <td>
                     <select class="form-control" id="txt-route" name="route" style="height: 34px !important; color: mediumvioletred">
-                        <option value="">Please Select</option>
                         @*@foreach (var item in RouteStep.OrderByDescending(c => c.RouteStepId).ToList())
                             {
                                 <option value=@item.RouteStepId>@item.RouteStep</option>
@@ -64,15 +58,22 @@
                                 <option value=@item.DescrText>@item.DescrText</option>
                             }*@
 
-                        <option value="">--Please Select--</option>
+                        <option value="">--Please Select Station--</option>
 
                     </select>
                 </td>
                 <td>
-                    <input id="txt-assy" name="assy" type="text" class="form-control" style="height:30px" />
+                    <input id="txt-assy" name="assy" type="text" class="form-control" style="height:30px" data-toggle="modal" href="#modal-search" readonly/>
+                    @*<select class="form-control" id="txt-assy" name="assy" style="height: 34px !important; color: mediumvioletred" onchange="fncOnChangeNumber()">
+                        <option value="">--Please Select Customer--</option>
+
+                    </select>*@
                 </td>
                 <td>
-                    <input id="txt-rev" name="rev" type="text" class="form-control" style="height:30px" />
+                    <input id="txt-rev" name="rev" type="text" class="form-control" style="height:30px" readonly/>
+                    @*<select class="form-control" id="txt-rev" name="rev" style="height: 34px !important; color: mediumvioletred">
+                        <option value="">--Please Select Number--</option>
+                    </select>*@
                 </td>
                 <td>
                     <select class="form-control" id="txt-type" name="type" data-search="type" style="color:mediumvioletred">
@@ -90,11 +91,6 @@
                         <option value=2>Jabil Test</option>
                     </select>
                 </td>
-                @*<td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>*@
                 <td></td>
                 <td>
                     <input id="txt-description" type="text" class="form-control" style="height:30px" />
@@ -117,12 +113,6 @@
                 <td>@item.Type</td>
                 <td>@item.Platform</td>
                 <td>@item.ScriptId</td>
-                @*<td>@item.ScriptName</td>
-                    <td>@item.ScriptRev</td>
-                    <td>@item.FileHash</td>
-                    <td>@item.Firmware</td>
-                    <td>@item.FirmwareRevision</td>*@
-
                 <td>@item.Description</td>
                 <td style="background-color:@item.StatusColour">@item.StatusName</td>
                 <td class="text-center">
@@ -137,3 +127,33 @@
     </table>
 
 </form>
+
+
+<div class="modal-area">
+    <div class="modal fade" id="modal-search" tabindex="-1" role="columnheader" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Search Assembly Number</h4>
+                    <p hidden id="hid-UserId"></p>
+                </div>
+                <form class="modal-body" id="frm-save">
+                    <div class="form-group">
+                        <label for="">Assembly Number</label>
+                        <input type="text" class="form-control" id="txt-search-input" style="color:mediumvioletred" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-search-input" class="btn green">Search</button>
+                    </div>
+                    <div id="tbl-result">
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <!--Kết thúc Modal thêm, update-->
+
+</div>

@@ -20,6 +20,8 @@ namespace SharedObjects.ValueObjects
         public string ScriptId { get; set; }
         public string ScriptName { get; set; }
         public string ScriptRev { get; set; }
+        public string PcnorDevNumber { get; set; }
+        public string ChangeDetail { get; set; }
         public string Description { get; set; }
         public string FileHash { get; set; }
         public string ScriptFileName { get; set; }

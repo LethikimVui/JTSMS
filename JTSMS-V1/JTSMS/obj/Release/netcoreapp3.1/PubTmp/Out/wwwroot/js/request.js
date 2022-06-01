@@ -7,10 +7,48 @@
 
     $('body').off('click', '#btn-reject').on('click', '#btn-reject', Reject);
     $('body').off('click', '#btn-close').on('click', '#btn-close', Close);
+    $('body').off('click', '#btn-close-approval').on('click', '#btn-close-approval', Close_Approval);
+
+    $('body').off('click', '#btn-search-input').on('click', '#btn-search-input', Search1);
+    $('body').off('click', '#btn-select').on('click', '#btn-select', Select);
 
     user = document.getElementById('userinfo').getAttribute('data-user');
     name = document.getElementById('userinfo').getAttribute('data-display-name');
     email = document.getElementById('userinfo').getAttribute('data-email');
+
+    function Search1() {
+        $('#tbl-result').html('');
+
+        _number = $('#txt-search-input').val();
+        debugger
+        $.ajax({
+            type: 'post',
+            url: '/request/Search_Number',
+            data: { number: _number },
+            success: function (response) {
+                debugger
+                if (response) {
+                    $('#tbl-result').html(response);
+                }
+                else {
+                    bootbox.alert("Number is not found");
+                }
+            }
+        })
+    }
+    function Select() {
+        _number = $(this).attr('data-number');
+        _rev = $(this).attr('data-rev');
+        id = $(this).attr('data-id');
+        $('#txt-assy').val(_number);
+        $('#txt-rev').val(_rev);
+        //$('#txt-equipmentid').attr('data-id', id);
+        $('#txt-search-input').val(_number);
+        $('#tbl-result').html('');
+        $('#modal-search').modal('hide');
+        debugger
+
+    }
 
 
     function Approve() {
@@ -204,6 +242,8 @@
             description: { required: true, },
             script: { required: true, },
             encrypted: { required: true, },
+            PCNorDevNumber: { required: true, },
+            changeDetail: { required: true, },
         },
         //messages: {
         //    scriptname: { required: "This field is required", },
@@ -243,6 +283,8 @@
             model.TypeId = parseInt($(this).attr('data-typeid'));
             model.ScriptName = $("#txt-scriptname").val();
             model.ScriptRev = $('#txt-scriptrev').val();
+            model.PCNorDevNumber = $('#txt-PCNorDevNumber').val();
+            model.ChangeDetail = $('#txt-changeDetail').val();
             model.Firmware = $('#txt-firmware').val();
             model.FirmwareRevision = $('#txt-firmwarerev').val();
             model.Description = $('#txt-description').val();
@@ -277,7 +319,7 @@
 
 
             uploadFile(script, name_script);
-            uploadFile(encripted, name_encripted);
+            uploadFile(encrypted, name_encrypted);
         }
     }
 
@@ -342,7 +384,38 @@
             }
         })
     }
+    function Close_Approval() {
+        var model = new Object();
+        model.ReqId = parseInt($(this).attr('data-reqid'));
+        model.ScriptId = $('#txt-scriptid').val();
+        model.Remark = $('#txt-remark-deviation').val();
+        model.UpdatedBy = user
+        model.UpdatedName = name
+        model.UpdatedEmail = email
 
+        debugger
+        $.ajax({
+            type: 'post',
+            url: '/request/Request_close',
+            dataType: 'json',
+            data: JSON.stringify(model),
+            contentType: 'application/json;charset=uft-8',
+            success: function (response) {
+                var statusCode = response.results.statusCode;
+                var message = response.results.message;
+
+                if (statusCode == 200) {
+                    bootbox.alert(message, function () { location.reload() });
+                }
+                else if (statusCode == 409) {
+                    bootbox.alert(message, function () { location.reload() });
+                }
+                else {
+                    bootbox.alert(message);
+                }
+            }
+        })
+    }
     function Search() {
         $('#tbl-content').html('');
         var model = new Object();

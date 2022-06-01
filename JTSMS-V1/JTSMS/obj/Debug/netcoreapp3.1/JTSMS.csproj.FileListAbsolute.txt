@@ -179,3 +179,5 @@ C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\J
 C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Debug\netcoreapp3.1\Interop.JEMS_3.dll
 C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Debug\netcoreapp3.1\Interop.ADODB.dll
 C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Debug\netcoreapp3.1\JTSMS.csproj.ResolveComReference.cache
+C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Debug\netcoreapp3.1\Razor\Views\Config\Search_Equipment.cshtml.g.cs
+C:\Users\1099969\OneDrive - Jabil\Desktop\Development_Project\Web\GitHub\JTSMS\JTSMS-V1\JTSMS\obj\Debug\netcoreapp3.1\Razor\Views\Request\Search_Number.cshtml.g.cs

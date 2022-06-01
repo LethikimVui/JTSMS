@@ -197,6 +197,10 @@ namespace API.Models
                     .HasColumnName("assemblyRevision")
                     .HasMaxLength(45);
 
+                entity.Property(e => e.ChangeDetail)
+                    .HasColumnName("changeDetail")
+                    .HasMaxLength(45);
+
                 entity.Property(e => e.CreatedBy)
                     .HasColumnName("createdBy")
                     .HasMaxLength(10);
@@ -235,6 +239,10 @@ namespace API.Models
 
                 entity.Property(e => e.IsActive).HasColumnName("isActive");
 
+                entity.Property(e => e.PcnorDevNumber)
+                    .HasColumnName("PCNorDevNumber")
+                    .HasMaxLength(45);
+
                 entity.Property(e => e.PlatformId)
                     .HasColumnName("platformId")
                     .HasColumnType("int(11)");
@@ -243,9 +251,10 @@ namespace API.Models
                     .HasColumnName("reqNumber")
                     .HasMaxLength(45);
 
-                entity.Property(e => e.RouteStep)
+                entity.Property(e => e.RouteStepId)
                     .HasColumnName("routeStepId")
                     .HasMaxLength(45);
+
                 entity.Property(e => e.ScriptFileName)
                     .HasColumnName("scriptFileName")
                     .HasMaxLength(255);
@@ -374,8 +383,12 @@ namespace API.Models
                     .HasColumnType("int(11)");
 
                 entity.Property(e => e.EquipmentId)
-                    .HasColumnName("equipment_id")
+                    .HasColumnName("equipmentId")
                     .HasColumnType("int(11)");
+
+                entity.Property(e => e.EquipmentName)
+                    .HasColumnName("equipmentName")
+                    .HasMaxLength(45);
 
                 entity.Property(e => e.IsActive)
                     .HasColumnName("isActive")
@@ -383,6 +396,14 @@ namespace API.Models
 
                 entity.Property(e => e.IsDmz)
                     .HasColumnName("isDMZ")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.IsWatchDogTrigger)
+                    .HasColumnName("isWatchDogTrigger")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.PlatFormId)
+                    .HasColumnName("platFormId")
                     .HasColumnType("int(11)");
 
                 entity.Property(e => e.ProcessStep)
@@ -394,15 +415,15 @@ namespace API.Models
                     .HasMaxLength(45);
 
                 entity.Property(e => e.TestTime)
-                    .HasColumnName("test_time")
+                    .HasColumnName("testTime")
                     .HasColumnType("int(8)");
 
                 entity.Property(e => e.TesterName)
                     .HasColumnName("testerName")
                     .HasMaxLength(45);
 
-                entity.Property(e => e.TesterPcName)
-                    .HasColumnName("tester_pc_name")
+                entity.Property(e => e.TesterPcname)
+                    .HasColumnName("testerPCName")
                     .HasMaxLength(45);
             });
             OnModelCreatingPartial(modelBuilder);

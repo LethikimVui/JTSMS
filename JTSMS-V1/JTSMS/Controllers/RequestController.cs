@@ -89,46 +89,32 @@ namespace JTSMS.Controllers
             }
             return Json(new { results = result });
         }
-
         public async Task<IActionResult> Request_close_deviation([FromBody] RequestViewModel model)
         {
             var result = await requestService.Request_close_deviation(model);
-            if (result.StatusCode == 200)
-            {
-                SentEmail_Closure(model);
+            //if (result.StatusCode == 200)
+            //{
+            //    SentEmail_Closure(model);
 
-            }
+            //}
+            return Json(new { results = result });
+        }
+        public async Task<IActionResult> Request_close([FromBody] RequestViewModel model)
+        {
+            var result = await requestService.Request_close(model);
+            //if (result.StatusCode == 200)
+            //{
+            //    SentEmail_Closure(model);
+
+            //}
             return Json(new { results = result });
         }
         public async Task<IActionResult> RequestDetail_get([FromBody] RequestViewModel model)
         {
-            OleDbDataAdapter dataAdapter = new OleDbDataAdapter();
-            DataTable dt = new DataTable();
-            JEMS_3.CR_RouteSteps CRr = new JEMS_3.CR_RouteSteps();
-            rs = CRr.ListByFactoryText("VNHCMM0MSSQLV1A", "JEMS", 7022);
-            //rs.Filter = "Step_ID='10'";
-
-            dataAdapter.Fill(dt, rs);
-            List<Recordset> lst = new List<Recordset>();
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                Recordset t = new Recordset()
-                {
-                    //RouteStep_ID = int.Parse(dt.Rows[i]["RouteStep_ID"].ToString()),
-                    DescrText = dt.Rows[i]["DescrText"].ToString(),
-                    //Descr = dt.Rows[i]["Descr"].ToString(),
-                    Step_ID = Int32.Parse(dt.Rows[i]["Step_ID"].ToString()),
-                    //RouteText = dt.Rows[i]["RouteText"].ToString(),
-                };
-                lst.Add(t);
-            }
-            //var lst1 = lst.Where(s => s.Step_ID == 10 || s.Step_ID == 12).Select(r => new Recordset { Step_ID = r.Step_ID, DescrText = r.DescrText}).Distinct().ToList();
-            var lst1 = lst.Where(s => s.Step_ID == 10 || s.Step_ID == 12).ToList();
-            lst1.ForEach(Console.WriteLine);
             ViewData["Customer"] = await commonService.Customer_Get();
             ViewData["Station"] = await commonService.Station_get();
             ViewData["Type"] = await commonService.Type_get();
-            ViewData["RouteStep"] = lst1; //await commonService.Master_RouteStep_get();
+            //ViewData["RouteStep"] = lst1; //await commonService.Master_RouteStep_get();
 
             var results = await requestService.RequestDetail_get(model);
             return PartialView(results);
@@ -145,7 +131,7 @@ namespace JTSMS.Controllers
             List<string> lst = new List<string>();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-               var DescrText = dt.Rows[i]["DescrText"].ToString();                   
+                var DescrText = dt.Rows[i]["DescrText"].ToString();
                 lst.Add(DescrText);
             }
             //var lst1 = lst.Where(s => s.Step_ID == 10 || s.Step_ID == 12).Select(r => new Recordset { Step_ID = r.Step_ID, DescrText = r.DescrText}).Distinct().ToList();
@@ -153,6 +139,63 @@ namespace JTSMS.Controllers
             lst1.Sort();
             return lst1;
         }
+        public List<string> Number(int customer_ID)
+        {
+            OleDbDataAdapter dataAdapter = new OleDbDataAdapter();
+            DataTable dt = new DataTable();
+            JEMS_3.CR_Assemblies CRa = new JEMS_3.CR_Assemblies();
+            rs = CRa.ListByCustomer("VNHCMM0MSSQLV1A", "JEMS", 7022, customer_ID);
+            dataAdapter.Fill(dt, rs);
+            List<string> lst = new List<string>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                lst.Add(dt.Rows[i]["Number"].ToString());
+            }
+            var results = lst.Distinct().ToList();
+            results.Sort();
+            return results;
+        }
+        public List<string> Revision(int customer_ID, string assy)
+        {
+            OleDbDataAdapter dataAdapter = new OleDbDataAdapter();
+            DataTable dt = new DataTable();
+            JEMS_3.CR_Assemblies CRa = new JEMS_3.CR_Assemblies();
+            rs = CRa.ListByCustomer("VNHCMM0MSSQLV1A", "JEMS", 7022, customer_ID);
+            rs.Filter = "Number ='" + assy + "'";
+
+            dataAdapter.Fill(dt, rs);
+            List<string> lst = new List<string>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                lst.Add(dt.Rows[i]["Revision"].ToString());
+            }
+            var results = lst.Distinct().ToList();
+            results.Sort();
+            return results;
+        }
+        [HttpPost]
+        public IActionResult Search_Number(string number)
+        {
+            OleDbDataAdapter dataAdapter = new OleDbDataAdapter();
+            DataTable dt = new DataTable();
+            JEMS_3.CR_Assemblies CRa = new JEMS_3.CR_Assemblies();
+            rs = CRa.ListActive("VNHCMM0MSSQLV1A", "JEMS", 7022, number);
+            dataAdapter.Fill(dt, rs);
+            List<NumberViewModel> lst = new List<NumberViewModel>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                NumberViewModel t = new NumberViewModel()
+                {
+                    Number = dt.Rows[i]["Number"].ToString(),
+                    Revision = dt.Rows[i]["Revision"].ToString()
+
+                };
+                lst.Add(t);
+            }
+            return PartialView(lst);
+        }
+
+
         public async Task<IActionResult> RequestDetail_get_by_id(int reqId)
         {
             var results = await requestService.RequestDetail_get_by_id(reqId);
@@ -256,7 +299,7 @@ namespace JTSMS.Controllers
             var Approval_get_current = await requestService.Approval_get_current(model.ReqId);
             foreach (var email in Approval_get_current)
             {
-                if (email != null)
+                if (email.Email != null)
                 {
                     message.To.Add(new MailAddress(email.Email));
                 }
@@ -301,7 +344,7 @@ namespace JTSMS.Controllers
                     {
                         foreach (var email in Approval_get_current)
                         {
-                            if (email != null)
+                            if (email.Email != null)
                             {
                                 message.To.Add(new MailAddress(email.Email));
                             }
@@ -320,7 +363,77 @@ namespace JTSMS.Controllers
                     {
                         foreach (var email in UserRole_Get_By_ScriptId)
                         {
-                            if (email != null)
+                            if (email.UserEmail != null)
+                            {
+                                message.To.Add(new MailAddress(email.UserEmail));
+                            }
+                        }
+                        message.Subject = "[Closed] Request is approved and closed";
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            message.CC.Add(new MailAddress(model.UpdatedEmail));
+            var configureEmail = configuration["Email:Cc"].Split(';');
+            foreach (var email in configureEmail)
+            {
+                if (email != "")
+                {
+                    message.CC.Add(new MailAddress(email));
+                }
+            }
+            //message.Subject = "[" + model.Action + "]";
+            message.Body = body;
+            message.IsBodyHtml = true;
+            smtp.Send(message);
+        }
+        #endregion
+        #region SentEmail_Deviation_Closure
+        public async void SentEmail_Deviation(RequestViewModel model)
+        {
+            string body = string.Empty;
+            body += "<div style='border - top:3px solid #22BCE5'>Hi,</div>";
+            //body += "There is a new change request by " + model.CreatedEmail + " as below:";
+
+            body += "<p>You may access <a href='http://vnhcmm0teapp05/jtsms/Request/RequestDetail_get_by_id?reqid=" + model.ReqId + "'>here</a> to get detail</p>";
+            body += "<p>This is automatic email, please do not reply</p>    Thanks";
+            MailMessage message = new MailMessage();
+            SmtpClient smtp = new SmtpClient("corimc04.corp.JABIL.ORG");
+            message.From = new MailAddress("JTSMS@Jabil.com");
+
+            var results = await requestService.RequestDetail_get_by_id(model.ReqId);
+            var statusId = results.StatusId;
+
+            switch (statusId)
+            {
+                case 2: // pending approval
+                    var Approval_get_current = await requestService.Approval_get_current(model.ReqId);
+                    if (Approval_get_current.Any())
+                    {
+                        foreach (var email in Approval_get_current)
+                        {
+                            if (email.Email != null)
+                            {
+                                message.To.Add(new MailAddress(email.Email));
+                            }
+                        }
+                        message.Subject = "[Pending Approval] Request Is Pending Approval";
+                    }
+                    break;
+                case 3: //rejected
+                    var request_detail = await requestService.RequestDetail_get_by_id(model.ReqId);
+                    message.To.Add(new MailAddress(request_detail.CreatedEmail));
+                    message.Subject = "[Rejected] Request is rejected";
+                    break;
+                case 4: // approved
+                    var UserRole_Get_By_ScriptId = await requestService.Access_UserRole_Get_By_ScriptId(model);
+                    if (UserRole_Get_By_ScriptId.Any())
+                    {
+                        foreach (var email in UserRole_Get_By_ScriptId)
+                        {
+                            if (email.UserEmail != null)
                             {
                                 message.To.Add(new MailAddress(email.UserEmail));
                             }

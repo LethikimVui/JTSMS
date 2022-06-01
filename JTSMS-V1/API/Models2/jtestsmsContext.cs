@@ -19,6 +19,7 @@ namespace API.Models2
         {
         }
 
+        public virtual DbSet<Watchdogconfig> Watchdogconfig { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,7 +32,73 @@ namespace API.Models2
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-          
+            modelBuilder.Entity<Watchdogconfig>(entity =>
+            {
+                entity.HasKey(e => e.WdconfigId)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("watchdogconfig");
+
+                entity.Property(e => e.WdconfigId)
+                    .HasColumnName("wdconfigId")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.AssyNumber)
+                    .HasColumnName("assyNumber")
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.AssyRev)
+                    .HasColumnName("assyRev")
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.CustId)
+                    .HasColumnName("custId")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.EquipmentId)
+                    .HasColumnName("equipmentId")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.EquipmentName)
+                    .HasColumnName("equipmentName")
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.IsActive)
+                    .HasColumnName("isActive")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.IsDmz)
+                    .HasColumnName("isDMZ")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.IsWatchDogTrigger)
+                    .HasColumnName("isWatchDogTrigger")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.PlatFormId)
+                    .HasColumnName("platFormId")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.ProcessStep)
+                    .HasColumnName("processStep")
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.RouteStep)
+                    .HasColumnName("routeStep")
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.TestTime)
+                    .HasColumnName("testTime")
+                    .HasColumnType("int(8)");
+
+                entity.Property(e => e.TesterName)
+                    .HasColumnName("testerName")
+                    .HasMaxLength(45);
+
+                entity.Property(e => e.TesterPcname)
+                    .HasColumnName("testerPCName")
+                    .HasMaxLength(45);
+            });
 
             OnModelCreatingPartial(modelBuilder);
         }

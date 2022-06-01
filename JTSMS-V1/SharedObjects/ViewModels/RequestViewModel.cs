@@ -21,6 +21,8 @@ namespace SharedObjects.ViewModels
         public string ScriptId { get; set; }
         public string ScriptName { get; set; }
         public string ScriptRev { get; set; }
+        public string PcnorDevNumber { get; set; }
+        public string ChangeDetail { get; set; }
         public string Firmware { get; set; }
         public string FirmwareRevision { get; set; }
         public string Description { get; set; }

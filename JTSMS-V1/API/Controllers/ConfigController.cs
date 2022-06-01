@@ -45,17 +45,16 @@ namespace API.Controllers
         {
             try
             {
-                await context.Database.ExecuteSqlCommandAsync(SPConfig.WatchDogConfig_insert, model.CustId, model.ProcessStep, model.RouteStep, model.TesterName, model.TesterPcName, model.EquipmentId, model.PlatformId, model.TestTime, model.Trigger, model.CreatedBy, model.CreatedName, model.CreatedEmail);
-                return Ok(new ResponseResult(200, "WatchDogConfig_insert Added Successfully"));
-                //if (!context.AccessUserRole.Where(x => (x.Ntlogin == model.Ntlogin) && (x.CustId == model.CustId) && (x.IsActive == 1)).ToList().Any())
-                //{
-                //    await context.Database.ExecuteSqlCommandAsync(SPAdmin.Access_UserRole_insert, model.Ntlogin, model.UserName, model.UserEmail, model.RoleId, model.PlantId, model.CustId, model.CreatedBy, model.CreatedName, model.CreatedEmail);
-                //    return Ok(new ResponseResult(200, "User Added Successfully"));
-                //}
-                //else
-                //{
-                //    return Conflict(new ResponseResult(400, "User already existing"));
-                //}
+                
+                if (!context.Watchdogconfig.Where(x => (x.CustId == model.CustId) && (x.ProcessStep == model.ProcessStep) && (x.RouteStep == model.RouteStep) && (x.TesterName == model.TesterName) && (x.TesterPcname == model.TesterPcName)&& (x.PlatFormId == model.PlatformId) && (x.EquipmentId == model.EquipmentId) && (x.IsActive == 1)).ToList().Any())
+                {
+                    await context.Database.ExecuteSqlCommandAsync(SPConfig.WatchDogConfig_insert, model.CustId, model.ProcessStep, model.RouteStep, model.TesterName, model.TesterPcName, model.EquipmentId, model.Equipment, model.PlatformId, model.TestTime, model.Trigger, model.CreatedBy, model.CreatedName, model.CreatedEmail);
+                    return Ok(new ResponseResult(200, "WatchDogConfig_insert Added Successfully"));
+                }
+                else
+                {
+                    return Conflict(new ResponseResult(400, "WatchDogConfig_insert already existing"));
+                }
             }
             catch (Exception ex)
             {
