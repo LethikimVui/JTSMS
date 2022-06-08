@@ -70,7 +70,7 @@
                                 Search
                             </a>
                         </li>
-                        @if (User.Identity.IsAuthenticated && User.IsInRole("SYSTEM ADMIN"))
+                        @if (User.Identity.IsAuthenticated && (User.IsInRole("SYSTEM ADMIN") || User.IsInRole("Super User")))
                         {
                             <li class="menu-dropdown mega-menu-dropdown ">
                                 <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">

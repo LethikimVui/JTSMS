@@ -29,8 +29,8 @@ namespace API.Controllers
         {
             try
             {
-                var list = context.Requestdetail.Where(s => s.CustId == model.CustId && s.StationId == model.StationId && s.RouteStepId == model.RouteStep && s.AssemblyNumber == model.AssemblyNumber && s.AssemblyRevision == model.AssemblyRevision && s.PlatformId == model.PlatformId && s.IsActive).ToList();
-                var t = list.Where(s => s.StatusId == 2);
+                var list = context.Requestdetail.Where(s => s.CustId == model.CustId && s.StationId == model.StationId && s.RouteStepId == model.RouteStep && s.AssemblyNumber == model.AssemblyNumber && s.PlatformId == model.PlatformId && s.IsActive == 1).ToList(); // && s.AssemblyRevision == model.AssemblyRevision
+                //var t = list.Where(s => s.StatusId == 2);
 
                 if (model.TypeId == 1)// New
                 {
@@ -47,14 +47,18 @@ namespace API.Controllers
                 else //PCN / Deviation
                 {
 
-                    if (!list.Where(s => s.TypeId == model.TypeId).Any() && list.Where(s => s.StatusId == 4 && s.TypeId == 1).Any())
+                    if (!list.Where(s => s.TypeId == model.TypeId).Any() && list.Where(s => s.StatusId == 4 && (s.TypeId == 1 || s.TypeId == 3)).Any())
                     {
                         await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_add, model.CustId, model.StationId, model.RouteStep, model.TypeId, model.PlatformId, model.AssemblyNumber, model.AssemblyRevision, model.Description, model.CreatedBy, model.CreatedName, model.CreatedEmail);
                         return Ok(new ResponseResult(200, "Request PCN / Deviation added"));
                     }
+                    else if (!list.Where(s => s.TypeId == model.TypeId).Any() && list.Where(s => s.StatusId == 6 && s.TypeId == 1).Any())
+                    {
+                        return Conflict(new ResponseResult(409, "Deviation is applied, you are not allowed to request Deviation! Please check"));
+                    }
                     else if (list.Where(s => s.TypeId == model.TypeId).Any())
                     {
-                        return Ok(new ResponseResult(200, "Request PCN / Deviation is already existing")); ;
+                        return Ok(new ResponseResult(409, "Request PCN / Deviation is already existing")); ;
                     }
                     else
                     {
@@ -110,21 +114,21 @@ namespace API.Controllers
                 return BadRequest(new ResponseResult(400, ex.Message));
             }
         }
-        [HttpPost("Request_close")]
-        [Obsolete]
-        public async Task<IActionResult> Request_close([FromBody] RequestViewModel model)
-        {
-            try
-            {
-                await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_close, model.ReqId, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
-                return Ok(new ResponseResult(200, "Deviation is closed, please get your team to updated the Script Id"));
-            }
-            catch (Exception ex)
-            {
+        //[HttpPost("Request_close")]
+        //[Obsolete]
+        //public async Task<IActionResult> Request_close([FromBody] RequestViewModel model)
+        //{
+        //    try
+        //    {
+        //        await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_close, model.ReqId, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
+        //        return Ok(new ResponseResult(200, "Deviation is closed, please get your team to updated the Script Id"));
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return BadRequest(new ResponseResult(400, ex.Message));
-            }
-        }
+        //        return BadRequest(new ResponseResult(400, ex.Message));
+        //    }
+        //}
         [HttpPost("Request_close_deviation")]
         [Obsolete]
         public async Task<IActionResult> Request_close_deviation([FromBody] RequestViewModel model)
@@ -133,6 +137,20 @@ namespace API.Controllers
             {
                 await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_close_deviation, model.ReqId, model.Remark, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
                 return Ok(new ResponseResult(200, "The Deviation Closure is submmited"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseResult(400, ex.Message));
+            }
+        }
+        [HttpPost("Request_approve_close_deviation")]
+        [Obsolete]
+        public async Task<IActionResult> Request_approve_close_deviation([FromBody] RequestViewModel model)
+        {
+            try
+            {
+                await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_approve_close_deviation, model.ReqId, model.Remark, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
+                return Ok(new ResponseResult(200, "The Deviation is Closed"));
             }
             catch (Exception ex)
             {
@@ -202,6 +220,13 @@ namespace API.Controllers
         public async Task<List<VApproval>> Approval_get_current(int reqId)
         {
             var results = await context.Query<VApproval>().AsNoTracking().FromSql(SPRequest.Approval_get_current, reqId).ToListAsync();
+            return results;
+        } 
+        [HttpGet("Approval_get_deviation/{reqId}")]
+        [Obsolete]
+        public async Task<List<VApproval>> Approval_get_deviation(int reqId)
+        {
+            var results = await context.Query<VApproval>().AsNoTracking().FromSql(SPRequest.Approval_get_deviation, reqId).ToListAsync();
             return results;
         }
 

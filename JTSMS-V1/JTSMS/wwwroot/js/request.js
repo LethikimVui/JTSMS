@@ -249,8 +249,8 @@
         rules: {
             scriptname: { required: true, },
             scriptrev: { required: true, },
-            firmware: { required: true, },
-            firmwarerev: { required: true, },
+            //firmware: { required: true, },
+            //firmwarerev: { required: true, },
             description: { required: true, },
             script: { required: true, },
             encrypted: { required: true, },
@@ -297,8 +297,8 @@
             model.ScriptRev = $('#txt-scriptrev').val();
             model.PCNorDevNumber = $('#txt-PCNorDevNumber').val();
             model.ChangeDetail = $('#txt-changeDetail').val();
-            model.Firmware = $('#txt-firmware').val();
-            model.FirmwareRevision = $('#txt-firmwarerev').val();
+            //model.Firmware = $('#txt-firmware').val();
+            //model.FirmwareRevision = $('#txt-firmwarerev').val();
             model.Description = $('#txt-description').val();
             model.UpdatedBy = user
             model.UpdatedName = name
@@ -387,9 +387,6 @@
                 if (statusCode == 200) {
                     bootbox.alert(message, function () { location.reload() });
                 }
-                else if (statusCode == 409) {
-                    bootbox.alert(message, function () { location.reload() });
-                }
                 else {
                     bootbox.alert(message);
                 }
@@ -400,7 +397,7 @@
         var model = new Object();
         model.ReqId = parseInt($(this).attr('data-reqid'));
         model.ScriptId = $('#txt-scriptid').val();
-        model.Remark = $('#txt-remark-deviation').val();
+        model.Remark = $('#txt-remark').val();
         model.UpdatedBy = user
         model.UpdatedName = name
         model.UpdatedEmail = email
@@ -408,7 +405,7 @@
         debugger
         $.ajax({
             type: 'post',
-            url: '/request/Request_close',
+            url: '/request/Request_approve_close_deviation',
             dataType: 'json',
             data: JSON.stringify(model),
             contentType: 'application/json;charset=uft-8',
@@ -418,10 +415,7 @@
 
                 if (statusCode == 200) {
                     bootbox.alert(message, function () { location.reload() });
-                }
-                else if (statusCode == 409) {
-                    bootbox.alert(message, function () { location.reload() });
-                }
+                }         
                 else {
                     bootbox.alert(message);
                 }

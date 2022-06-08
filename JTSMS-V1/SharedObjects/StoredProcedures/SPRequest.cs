@@ -14,7 +14,7 @@ namespace SharedObjects.StoredProcedures
         public static string Request_approve = "call usp_Request_approve (@p0,@p1,@p2,@p3,@p4,@p5)";
         public static string Request_reject = "call usp_Request_reject (@p0,@p1,@p2,@p3,@p4,@p5)";
 
-        public static string Request_close = "call usp_Request_close (@p0,@p1,@p2,@p3)";
+        public static string Request_approve_close_deviation = "call usp_Request_approve_close_deviation (@p0,@p1,@p2,@p3,@p4)";
         public static string Request_close_deviation = "call usp_Request_close_deviation (@p0,@p1,@p2,@p3,@p4)";
 
 
@@ -25,5 +25,7 @@ namespace SharedObjects.StoredProcedures
 
         public static string Approval_get = "call usp_Approval_get (@p0)";
         public static string Approval_get_current = "call usp_Approval_get_current (@p0)";
+
+        public static string Approval_get_deviation = "call usp_Approval_get_deviation (@p0)";
     }
 }

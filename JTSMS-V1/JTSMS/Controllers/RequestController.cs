@@ -99,9 +99,9 @@ namespace JTSMS.Controllers
             //}
             return Json(new { results = result });
         }
-        public async Task<IActionResult> Request_close([FromBody] RequestViewModel model)
+        public async Task<IActionResult> Request_approve_close_deviation([FromBody] RequestViewModel model)
         {
-            var result = await requestService.Request_close(model);
+            var result = await requestService.Request_approve_close_deviation(model);
             //if (result.StatusCode == 200)
             //{
             //    SentEmail_Closure(model);
@@ -139,40 +139,40 @@ namespace JTSMS.Controllers
             lst1.Sort();
             return lst1;
         }
-        public List<string> Number(int customer_ID)
-        {
-            OleDbDataAdapter dataAdapter = new OleDbDataAdapter();
-            DataTable dt = new DataTable();
-            JEMS_3.CR_Assemblies CRa = new JEMS_3.CR_Assemblies();
-            rs = CRa.ListByCustomer("VNHCMM0MSSQLV1A", "JEMS", 7022, customer_ID);
-            dataAdapter.Fill(dt, rs);
-            List<string> lst = new List<string>();
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                lst.Add(dt.Rows[i]["Number"].ToString());
-            }
-            var results = lst.Distinct().ToList();
-            results.Sort();
-            return results;
-        }
-        public List<string> Revision(int customer_ID, string assy)
-        {
-            OleDbDataAdapter dataAdapter = new OleDbDataAdapter();
-            DataTable dt = new DataTable();
-            JEMS_3.CR_Assemblies CRa = new JEMS_3.CR_Assemblies();
-            rs = CRa.ListByCustomer("VNHCMM0MSSQLV1A", "JEMS", 7022, customer_ID);
-            rs.Filter = "Number ='" + assy + "'";
+        //public List<string> Number(int customer_ID)
+        //{
+        //    OleDbDataAdapter dataAdapter = new OleDbDataAdapter();
+        //    DataTable dt = new DataTable();
+        //    JEMS_3.CR_Assemblies CRa = new JEMS_3.CR_Assemblies();
+        //    rs = CRa.ListByCustomer("VNHCMM0MSSQLV1A", "JEMS", 7022, customer_ID);
+        //    dataAdapter.Fill(dt, rs);
+        //    List<string> lst = new List<string>();
+        //    for (int i = 0; i < dt.Rows.Count; i++)
+        //    {
+        //        lst.Add(dt.Rows[i]["Number"].ToString());
+        //    }
+        //    var results = lst.Distinct().ToList();
+        //    results.Sort();
+        //    return results;
+        //}
+        //public List<string> Revision(int customer_ID, string assy)
+        //{
+        //    OleDbDataAdapter dataAdapter = new OleDbDataAdapter();
+        //    DataTable dt = new DataTable();
+        //    JEMS_3.CR_Assemblies CRa = new JEMS_3.CR_Assemblies();
+        //    rs = CRa.ListByCustomer("VNHCMM0MSSQLV1A", "JEMS", 7022, customer_ID);
+        //    rs.Filter = "Number ='" + assy + "'";
 
-            dataAdapter.Fill(dt, rs);
-            List<string> lst = new List<string>();
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                lst.Add(dt.Rows[i]["Revision"].ToString());
-            }
-            var results = lst.Distinct().ToList();
-            results.Sort();
-            return results;
-        }
+        //    dataAdapter.Fill(dt, rs);
+        //    List<string> lst = new List<string>();
+        //    for (int i = 0; i < dt.Rows.Count; i++)
+        //    {
+        //        lst.Add(dt.Rows[i]["Revision"].ToString());
+        //    }
+        //    var results = lst.Distinct().ToList();
+        //    results.Sort();
+        //    return results;
+        //}
         [HttpPost]
         public IActionResult Search_Number(string number)
         {
@@ -201,27 +201,29 @@ namespace JTSMS.Controllers
             var results = await requestService.RequestDetail_get_by_id(reqId);
             var Approval_get = await requestService.Approval_get(reqId);
             var Approval_get_current = await requestService.Approval_get_current(reqId);
+            var Approval_get_deviation = await requestService.Approval_get_deviation(reqId);
 
             ViewData["Approval_get"] = Approval_get;
             ViewData["Approval_get_current"] = Approval_get_current;
+            ViewData["Approval_get_deviation"] = Approval_get_deviation;
             return View(results);
         }
 
-        static string ComputeFileHash(string filename)
-        {
-            byte[] result;
-            SHA1 sha = new SHA1CryptoServiceProvider();
-            using (StreamReader sr = new StreamReader(filename))
-            {
-                result = sha.ComputeHash(sr.BaseStream);
-            }
-            string retString = "";
-            foreach (byte b in result)
-            {
-                retString += b.ToString("X2"); // Added the "2" to ensure that leading zeros are added to the string. RC 5/9/2013
-            }
-            return retString;
-        }
+        //static string ComputeFileHash(string filename)
+        //{
+        //    byte[] result;
+        //    SHA1 sha = new SHA1CryptoServiceProvider();
+        //    using (StreamReader sr = new StreamReader(filename))
+        //    {
+        //        result = sha.ComputeHash(sr.BaseStream);
+        //    }
+        //    string retString = "";
+        //    foreach (byte b in result)
+        //    {
+        //        retString += b.ToString("X2"); // Added the "2" to ensure that leading zeros are added to the string. RC 5/9/2013
+        //    }
+        //    return retString;
+        //}
 
         [HttpPost]
         public async Task<IActionResult> UploadFile(IFormFile file, string filename)
@@ -349,8 +351,9 @@ namespace JTSMS.Controllers
                                 message.To.Add(new MailAddress(email.Email));
                             }
                         }
-                        message.Subject = "[Pending Approval] Request Is Pending Approval";
                     }
+                    message.Subject = "[Pending Approval] Request Is Pending Approval";
+
                     break;
                 case 3: //rejected
                     var request_detail = await requestService.RequestDetail_get_by_id(model.ReqId);
@@ -368,8 +371,9 @@ namespace JTSMS.Controllers
                                 message.To.Add(new MailAddress(email.UserEmail));
                             }
                         }
-                        message.Subject = "[Closed] Request is approved and closed";
                     }
+                    message.Subject = "[Closed] Request is approved and closed";
+
                     break;
                 default:
                     break;

@@ -17,13 +17,15 @@ namespace Services.Interfaces
         Task<ResponseResult> Request_submit(RequestViewModel model);
         Task<ResponseResult> Request_approve(RequestViewModel model);
         Task<ResponseResult> Request_reject(RequestViewModel model);
-        Task<ResponseResult> Request_close(RequestViewModel model);
+
+        Task<ResponseResult> Request_approve_close_deviation(RequestViewModel model);
         Task<ResponseResult> Request_close_deviation(RequestViewModel model);
        
         Task<List<VDetail>> RequestDetail_get(RequestViewModel model);
         Task<VDetail> RequestDetail_get_by_id(int reqId);
         Task<List<VApproval>> Approval_get(int reqId);
         Task<List<VApproval>> Approval_get_current(int reqId);
+        Task<List<VApproval>> Approval_get_deviation(int reqId);
         Task<List<VUserRole>> Access_UserRole_Get_By_ScriptId(RequestViewModel model);
 
     }

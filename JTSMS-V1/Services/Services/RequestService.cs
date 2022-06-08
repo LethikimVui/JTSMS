@@ -36,6 +36,17 @@ namespace Services.Services
                 results = JsonConvert.DeserializeObject<List<VApproval>>(apiResponse);
             }
             return results;
+        }  
+        public async Task<List<VApproval>> Approval_get_deviation(int reqId)
+        {
+            List<VApproval> results = new List<VApproval>();
+            //StringContent content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+            using (var response = await httpClient.GetAsync("api/request/Approval_get_deviation/" + reqId))
+            {
+                var apiResponse = await response.Content.ReadAsStringAsync();
+                results = JsonConvert.DeserializeObject<List<VApproval>>(apiResponse);
+            }
+            return results;
         }
 
         public async Task<ResponseResult> RequestDetail_delete(RequestViewModel model)
@@ -121,11 +132,11 @@ namespace Services.Services
             return responseResult;
         }
 
-        public async Task<ResponseResult> Request_close(RequestViewModel model)
+        public async Task<ResponseResult> Request_approve_close_deviation(RequestViewModel model)
         {
             ResponseResult responseResult = new ResponseResult();
             StringContent content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
-            using (var response = await httpClient.PostAsync("api/request/Request_close", content))
+            using (var response = await httpClient.PostAsync("api/request/Request_approve_close_deviation", content))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 responseResult = JsonConvert.DeserializeObject<ResponseResult>(apiResponse);

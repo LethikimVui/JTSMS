@@ -30,7 +30,7 @@ namespace API.Models
         public string ScriptFileName { get; set; }
         public string EncriptedFileName { get; set; }
         public string RouteStepId { get; set; }
-        public bool IsActive { get; set; }
+        public int IsActive { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedName { get; set; }
         public string CreatedEmail { get; set; }
