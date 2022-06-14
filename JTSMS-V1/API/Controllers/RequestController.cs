@@ -29,8 +29,83 @@ namespace API.Controllers
         {
             try
             {
-                var list = context.Requestdetail.Where(s => s.CustId == model.CustId && s.StationId == model.StationId && s.RouteStepId == model.RouteStep && s.AssemblyNumber == model.AssemblyNumber && s.PlatformId == model.PlatformId && s.IsActive == 1).ToList(); // && s.AssemblyRevision == model.AssemblyRevision
-                //var t = list.Where(s => s.StatusId == 2);
+                var list = context.Requestdetail.Where(s => s.CustId == model.CustId && s.StationId == model.StationId
+                                                         && s.RouteStepId == model.RouteStep && s.AssemblyNumber == model.AssemblyNumber
+                                                         && s.PlatformId == model.PlatformId && s.IsActive == 1)
+                                                .ToList(); // && s.AssemblyRevision == model.AssemblyRevision
+                                                           //var t = list.Where(s => s.StatusId == 2);
+
+                //if (model.TypeId == 1)// New
+                //{
+                //    if (!list.Where(s => s.TypeId == 1 || s.TypeId == 3).Any())
+                //    {
+                //        await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_add, model.CustId, model.StationId, model.RouteStep, model.TypeId, model.PlatformId, model.AssemblyNumber, model.AssemblyRevision, model.Description, model.CreatedBy, model.CreatedName, model.CreatedEmail);
+                //        return Ok(new ResponseResult(200, "New Request added"));
+                //    }
+                //    else
+                //    {
+                //        return Conflict(new ResponseResult(409, "The New / ECO / ECN/ PCN request is implementing"));
+                //    }
+                //}
+                //else if (model.TypeId == 2) // Deviation
+                //{
+                //    if (list.Where(s => (s.TypeId == 1 || s.TypeId == 3) && s.StatusId == 4).Any())
+                //    {
+                //        if (!list.Where(s => s.TypeId == 2 && s.StatusId == 4).Any())
+                //        {
+                //            await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_add, model.CustId, model.StationId, model.RouteStep, model.TypeId, model.PlatformId, model.AssemblyNumber, model.AssemblyRevision, model.Description, model.CreatedBy, model.CreatedName, model.CreatedEmail);
+                //            return Ok(new ResponseResult(200, "Deviation Request added"));
+                //        }
+                //        else
+                //        {
+                //            return Ok(new ResponseResult(409, "Deviation Request is implementing"));
+                //        }
+                //    }
+                //    else
+                //    {
+                //        return BadRequest(new ResponseResult(400, "The New / ECO / ECN/ PCN request is not existing"));
+
+                //    }
+                //}
+                //else if (model.TypeId == 3) // PCN/ECO/ECN
+                //{
+                //    if (!list.Where(s => s.TypeId == 1 || s.TypeId == 3).Any())             
+                //    {
+
+                //            await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_add, model.CustId, model.StationId, model.RouteStep, model.TypeId, model.PlatformId, model.AssemblyNumber, model.AssemblyRevision, model.Description, model.CreatedBy, model.CreatedName, model.CreatedEmail);
+                //            return Ok(new ResponseResult(200, "PCN/ECO/ECN Request added"));                      
+                //    }
+                //    else
+                //    {
+
+                //        if (list.Where(s => s.StatusId == 1 || s.StatusId == 2 || s.StatusId == 3).Any())
+                //        {
+                //            return Conflict(new ResponseResult(409, "The request is already pending approval"));
+                //        }
+                //        else if (list.Where(s => s.StatusId == 4 && (s.StatusId == 5 || s.StatusId == 6)).Any())
+                //        {
+                //            return Conflict(new ResponseResult(409, "PCN/ECO/ECN Request is implementing"));
+
+
+                //        }
+                //        else if (list.Where(s => s.StatusId == 5 || s.StatusId == 6).Any())
+                //        {
+                //            return Ok(new ResponseResult(409, "Deviation Request is implementing"));
+
+                //        }
+                //        else
+                //        {
+                //            await context.Database.ExecuteSqlCommandAsync(SPRequest.Request_add, model.CustId, model.StationId, model.RouteStep, model.TypeId, model.PlatformId, model.AssemblyNumber, model.AssemblyRevision, model.Description, model.CreatedBy, model.CreatedName, model.CreatedEmail);
+                //            return Ok(new ResponseResult(200, "PCN/ECO/ECN Request added"));
+                //        }
+
+                //    }
+                //}
+                //else
+                //{
+                //    return BadRequest(new ResponseResult(400, "ERROR"));
+
+                //}
 
                 if (model.TypeId == 1)// New
                 {
@@ -41,7 +116,7 @@ namespace API.Controllers
                     }
                     else
                     {
-                        return Conflict(new ResponseResult(409, "The New request is already existing"));
+                        return Conflict(new ResponseResult(409, "The New / ECO / ECN/ PCN request is already existing"));
                     }
                 }
                 else //PCN / Deviation
@@ -64,7 +139,7 @@ namespace API.Controllers
                     {
                         return Conflict(new ResponseResult(409, "No record for New request, you are not allowed to request ECN / Deviation! Please check"));
                     }
-                }               
+                }
             }
             catch (Exception ex)
             {
@@ -99,7 +174,7 @@ namespace API.Controllers
             {
                 return BadRequest(new ResponseResult(400, ex.Message));
             }
-        } 
+        }
         [HttpPost("Request_reject")]
         [Obsolete]
         public async Task<IActionResult> Request_reject([FromBody] RequestViewModel model)
@@ -164,7 +239,7 @@ namespace API.Controllers
             try
             {
                 await context.Database.ExecuteSqlCommandAsync(SPRequest.RequestDetail_delete, model.ReqId, model.UpdatedBy, model.UpdatedName, model.UpdatedEmail);
-                return Ok(new ResponseResult(200, "The Request "+ model.ReqId + " is already deleted"));
+                return Ok(new ResponseResult(200, "The Request " + model.ReqId + " is already deleted"));
             }
             catch (Exception ex)
             {
@@ -221,7 +296,7 @@ namespace API.Controllers
         {
             var results = await context.Query<VApproval>().AsNoTracking().FromSql(SPRequest.Approval_get_current, reqId).ToListAsync();
             return results;
-        } 
+        }
         [HttpGet("Approval_get_deviation/{reqId}")]
         [Obsolete]
         public async Task<List<VApproval>> Approval_get_deviation(int reqId)

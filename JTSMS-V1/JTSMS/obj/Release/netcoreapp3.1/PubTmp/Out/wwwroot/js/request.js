@@ -9,24 +9,36 @@
     $('body').off('click', '#btn-close').on('click', '#btn-close', Close);
     $('body').off('click', '#btn-close-approval').on('click', '#btn-close-approval', Close_Approval);
 
-    $('body').off('click', '#btn-search-input').on('click', '#btn-search-input', Search1);
+    $('body').off('click', '#btn-search-input').on('click', '#btn-search-input', Search_Number);
     $('body').off('click', '#btn-select').on('click', '#btn-select', Select);
+    $('body').off('click', '#test').on('click', '#test', Test);
+
+    function Test() {
+        var from = $('#txt-from').val().replaceAll('-', '/')
+        var to = $('#txt-to').val().replaceAll('-', '/')
+        
+        var date1 = new Date(from);
+        var date2 = new Date(to);
+        // To calculate the time difference of two dates
+        var Difference_In_Time = date2.getTime() - date1.getTime();
+
+        // To calculate the no. of days between two dates
+        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+        bootbox.alert(Difference_In_Days.toString())
+    }
 
     user = document.getElementById('userinfo').getAttribute('data-user');
     name = document.getElementById('userinfo').getAttribute('data-display-name');
     email = document.getElementById('userinfo').getAttribute('data-email');
 
-    function Search1() {
+    function Search_Number() {
         $('#tbl-result').html('');
-
         _number = $('#txt-search-input').val();
-        debugger
         $.ajax({
             type: 'post',
             url: '/request/Search_Number',
             data: { number: _number },
             success: function (response) {
-                debugger
                 if (response) {
                     $('#tbl-result').html(response);
                 }
@@ -237,8 +249,8 @@
         rules: {
             scriptname: { required: true, },
             scriptrev: { required: true, },
-            firmware: { required: true, },
-            firmwarerev: { required: true, },
+            //firmware: { required: true, },
+            //firmwarerev: { required: true, },
             description: { required: true, },
             script: { required: true, },
             encrypted: { required: true, },
@@ -285,8 +297,8 @@
             model.ScriptRev = $('#txt-scriptrev').val();
             model.PCNorDevNumber = $('#txt-PCNorDevNumber').val();
             model.ChangeDetail = $('#txt-changeDetail').val();
-            model.Firmware = $('#txt-firmware').val();
-            model.FirmwareRevision = $('#txt-firmwarerev').val();
+            //model.Firmware = $('#txt-firmware').val();
+            //model.FirmwareRevision = $('#txt-firmwarerev').val();
             model.Description = $('#txt-description').val();
             model.UpdatedBy = user
             model.UpdatedName = name
@@ -375,9 +387,6 @@
                 if (statusCode == 200) {
                     bootbox.alert(message, function () { location.reload() });
                 }
-                else if (statusCode == 409) {
-                    bootbox.alert(message, function () { location.reload() });
-                }
                 else {
                     bootbox.alert(message);
                 }
@@ -388,7 +397,7 @@
         var model = new Object();
         model.ReqId = parseInt($(this).attr('data-reqid'));
         model.ScriptId = $('#txt-scriptid').val();
-        model.Remark = $('#txt-remark-deviation').val();
+        model.Remark = $('#txt-remark').val();
         model.UpdatedBy = user
         model.UpdatedName = name
         model.UpdatedEmail = email
@@ -396,7 +405,7 @@
         debugger
         $.ajax({
             type: 'post',
-            url: '/request/Request_close',
+            url: '/request/Request_approve_close_deviation',
             dataType: 'json',
             data: JSON.stringify(model),
             contentType: 'application/json;charset=uft-8',
@@ -406,10 +415,7 @@
 
                 if (statusCode == 200) {
                     bootbox.alert(message, function () { location.reload() });
-                }
-                else if (statusCode == 409) {
-                    bootbox.alert(message, function () { location.reload() });
-                }
+                }         
                 else {
                     bootbox.alert(message);
                 }
@@ -453,5 +459,5 @@
             }
         })
     }
-  
+
 })

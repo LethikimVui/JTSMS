@@ -20,10 +20,10 @@ namespace API.Models
         public string Scriptrev { get; set; }
         public string Description { get; set; }
         public string Filehash { get; set; }
-        public int? TypeId { get; set; }
+        public int TypeId { get; set; }
         public string PcnorDevNumber { get; set; }
         public string ChangeDetail { get; set; }
-        public int? StatusId { get; set; }
+        public int StatusId { get; set; }
         public string Firmware { get; set; }
         public string FirmwareRevision { get; set; }
         public int? PlatformId { get; set; }

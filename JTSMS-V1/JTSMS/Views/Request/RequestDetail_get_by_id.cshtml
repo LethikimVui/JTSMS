@@ -277,8 +277,8 @@
 
 
                         @if (Approval_get_current.Where(s => s.NTLogin == User.GetSpecificClaim("Ntlogin")).Any() ||
-                            (Approval_get_deviation.Where(s => s.NTLogin == User.GetSpecificClaim("Ntlogin")).Any() && 
-                        Model.StatusId == 4 && Model.TypeId == 2 && User.GetSpecificClaim("Ntlogin") == Model.CreatedBy))
+                            Approval_get_deviation.Where(s => s.NTLogin == User.GetSpecificClaim("Ntlogin") && s.IsClosed == 0).Any() ||
+                        (Model.StatusId == 4 && Model.TypeId == 2 && User.GetSpecificClaim("Ntlogin") == Model.CreatedBy))
                         {
                             <div class="form-group col-md-12 pull-left">
                                 <label class="text-center bold font-green-sharp" for="">Remark</label>
