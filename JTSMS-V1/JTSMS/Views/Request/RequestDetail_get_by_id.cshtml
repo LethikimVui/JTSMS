@@ -24,17 +24,17 @@
                     </div>
                     <div class="form-group col-md-2 pull-left">
                         <label class="text-center bold font-green-sharp" for="">Customer</label>
-                        <input class="form-control" value="@Model.CustName" readonly />
+                        <input id="txt-custname" class="form-control" value="@Model.CustName" readonly />
 
                     </div>
                     <div class="form-group col-md-2 pull-left">
                         <label class="text-center bold font-green-sharp" for="">Station</label>
-                        <input class="form-control" value="@Model.Station" readonly />
+                        <input id="txt-station" class="form-control" value="@Model.Station" readonly />
 
                     </div>
                     <div class="form-group col-md-2 pull-left">
                         <label class="text-center bold font-green-sharp" for="">Assembly Number</label>
-                        <input class="form-control" value="@Model.AssemblyNumber" readonly />
+                        <input id="txt-assembly" class="form-control" value="@Model.AssemblyNumber" readonly />
 
                     </div>
                     <div class="form-group col-md-2 pull-left">
@@ -51,11 +51,21 @@
                         <input class="form-control" value="@Model.Platform" readonly />
 
                     </div>
-                    <div class="form-group col-md-4 pull-left">
+                    
+                    <div class="form-group col-md-4 pull-left ">
                         <label class="text-center bold font-green-sharp" for="">Test Script Id</label>
-                        <input class="form-control" id="txt-scriptid" value="@Model.ScriptId" readonly />
+                        <div class=" input-group">
 
+                            <input class="form-control" id="txt-scriptid" value="@Model.ScriptId" readonly />
+                            <span class="input-group-btn">
+                                <button id="btn-copy" class="btn btn-default" type="button">
+                                    <span class="tooltiptext" id="myTooltip">Copy</span>
+                                 
+                                </button>
+                            </span>
+                        </div>
                     </div>
+                  
                     <div class="form-group col-md-2 pull-left">
                         <label class="text-center bold font-green-sharp" for="">Creation Date</label>
                         <input class="form-control" value="@Model.creationDate" readonly />
@@ -102,6 +112,11 @@
                                 <div class="form-group col-md-4 pull-left">
                                     <label class="text-center bold font-green-sharp" for="">Encrypted Script</label>
                                     <input id="txt-encrypted" name="encrypted" type="file" class="form-control" accept=".jts_encrypted" />
+                                </div>
+
+                                <div class="form-group col-md-4 pull-left">
+                                    <label class="text-center bold font-green-sharp" for="">Evidence</label>
+                                    <input id="txt-evidence" name="evidence" type="file" class="form-control" accept=".*" />
                                 </div>
 
 
@@ -166,11 +181,11 @@
 
                             <div class="form-group col-md-4 pull-left" style="height:62px">
                                 <label class="text-center bold font-green-sharp" for="">Script File Name</label>
-                                <a class="wrapper" href="@Url.Action("DownloadFile", "Request", new { fileName = @Model.ScriptFileName })">@Model.ScriptFileName</a>
+                                <a class="wrapper" href="@Url.Action("DownloadFile", "Request", new { fileName = @Model.ScriptFileName, type = "Origin" , custName = Model.CustName, station = Model.Station, assembly = Model.AssemblyNumber})">@Model.ScriptFileName</a>
                             </div>
                             <div class="form-group col-md-4 pull-left" style="height:62px">
                                 <label class="text-center bold font-green-sharp" for="">Encrypted File Name</label>
-                                <a class="wrapper" href="@Url.Action("DownloadFile", "Request", new { fileName = @Model.EncriptedFileName })">@Model.EncriptedFileName</a>
+                                <a class="wrapper" href="@Url.Action("DownloadFile", "Request", new { fileName = @Model.EncriptedFileName, type = "encrypted" , custName = Model.CustName, station = Model.Station, assembly = Model.AssemblyNumber})">@Model.EncriptedFileName</a>
                             </div>
                             <div class="form-group col-md-4 pull-left">
                                 <label class="text-center bold font-green-sharp" for="">File Hash</label>
@@ -208,17 +223,17 @@
                             </thead>
                             <tbody>
                                 @foreach (var item in Approval_get.GroupBy(u => u.RouteName)  // group by RouteName
-                                          .Select(g => new VApproval   // select values
-                                                               {
-                                              RouteName = g.First().RouteName,
-                                              IsClosed = g.First().IsClosed,
-                                              UpdateDate = g.First().UpdateDate,
-                                              UpdatedName = g.First().UpdatedName,
-                                              Remarks = g.First().Remarks,
-                                              Name = string.Join(", ", g.Select(u => u.Name)),
-                                              Email = string.Join(", ", g.Select(u => u.Email))
-                                          })
-                                          .ToList())
+                                .Select(g => new VApproval   // select values
+                                                 {
+                                    RouteName = g.First().RouteName,
+                                    IsClosed = g.First().IsClosed,
+                                    UpdateDate = g.First().UpdateDate,
+                                    UpdatedName = g.First().UpdatedName,
+                                    Remarks = g.First().Remarks,
+                                    Name = string.Join(", ", g.Select(u => u.Name)),
+                                    Email = string.Join(", ", g.Select(u => u.Email))
+                                })
+                                .ToList())
                                 {
                                     <tr>
                                         <td class="text-center">@item.RouteName</td>
@@ -240,17 +255,17 @@
                                 }
 
                                 @foreach (var item in Approval_get_deviation.GroupBy(u => u.RouteName)  // group by RouteName
-                                           .Select(g => new VApproval   // select values
-                                                                {
-                                               RouteName = g.First().RouteName,
-                                               IsClosed = g.First().IsClosed,
-                                               UpdateDate = g.First().UpdateDate,
-                                               UpdatedName = g.First().UpdatedName,
-                                               Remarks = g.First().Remarks,
-                                               Name = string.Join(", ", g.Select(u => u.Name)),
-                                               Email = string.Join(", ", g.Select(u => u.Email))
-                                           })
-                                           .ToList())
+                                 .Select(g => new VApproval   // select values
+                                                  {
+                                     RouteName = g.First().RouteName,
+                                     IsClosed = g.First().IsClosed,
+                                     UpdateDate = g.First().UpdateDate,
+                                     UpdatedName = g.First().UpdatedName,
+                                     Remarks = g.First().Remarks,
+                                     Name = string.Join(", ", g.Select(u => u.Name)),
+                                     Email = string.Join(", ", g.Select(u => u.Email))
+                                 })
+                                 .ToList())
                                 {
                                     <tr>
                                         <td class="text-center">@item.RouteName - Deviation</td>
@@ -277,8 +292,8 @@
 
 
                         @if (Approval_get_current.Where(s => s.NTLogin == User.GetSpecificClaim("Ntlogin")).Any() ||
-                            Approval_get_deviation.Where(s => s.NTLogin == User.GetSpecificClaim("Ntlogin") && s.IsClosed == 0).Any() ||
-                        (Model.StatusId == 4 && Model.TypeId == 2 && User.GetSpecificClaim("Ntlogin") == Model.CreatedBy))
+                  Approval_get_deviation.Where(s => s.NTLogin == User.GetSpecificClaim("Ntlogin") && s.IsClosed == 0).Any() ||
+              (Model.StatusId == 4 && Model.TypeId == 2 && User.GetSpecificClaim("Ntlogin") == Model.CreatedBy))
                         {
                             <div class="form-group col-md-12 pull-left">
                                 <label class="text-center bold font-green-sharp" for="">Remark</label>
@@ -319,48 +334,24 @@
         </div>
     </div>
 </div>
-
-
 @section Scripts{
 
     <script src="~/js/request.js"></script>
-    <script>
-        document.getElementById('txt-encrypted').addEventListener('change', Encripted)
-        function Encripted() {
-            var reader = new FileReader(); // define a Reader
-            var file = $('#txt-encrypted')[0].files[0]; // get the File obect
-            if (!file) {
-                alert('no encrypted file selected');
-                return
-            } // check if user selected a file
-            reader.onload = function (f) {
-                var file_result = this.result; // this == reader, get the loaded file "result"
-                var file_wordArr = CryptoJS.lib.WordArray.create(file_result); //convert blob to WordArray , see https://code.google.com/p/crypto-js/issues/detail?id=67
-                var sha1_hash = CryptoJS.SHA1(file_wordArr); //calculate SHA1 hash
-                var sha1_hash1 = sha1_hash.toString()
-                //alert("Calculated SHA1:" + sha1_hash.toString()); //output result
-                $('#txt-encrypted').attr('data-hash-encrypted', sha1_hash1)
-            };
-            reader.readAsArrayBuffer(file); // read the file as ArrayBuffer
-        }
-        document.getElementById('txt-script').addEventListener('change', Script)
+    <script src="~/js/request-by-id.js" type="text/javascript"></script>
+   <script>
+        //function copy() {           
+        //    var copyText = document.getElementById("txt-scriptid");
+        //    copyText.select();
+        //   // copyText.setSelectionRange(0, 99999);
+        //   // navigator.clipboard.writeText(copyText.value);
+        //    document.execCommand("copy");           
+        //    var tooltip = document.getElementById("myTooltip");
+        //    tooltip.innerHTML = "Copied";
+        //}
+        //function out() {
+        //    var tooltip = document.getElementById("myTooltip");
+        //    tooltip.innerHTML = "Copy";
+        //}
 
-        function Script() {
-            var reader = new FileReader(); // define a Reader
-            var file = $('#txt-script')[0].files[0]; // get the File obect
-            if (!file) {
-                alert('no script file selected');
-                return
-            } // check if user selected a file
-            reader.onload = function (f) {
-                var file_result = this.result; // this == reader, get the loaded file "result"
-                var file_wordArr = CryptoJS.lib.WordArray.create(file_result); //convert blob to WordArray , see https://code.google.com/p/crypto-js/issues/detail?id=67
-                var sha1_hash = CryptoJS.SHA1(file_wordArr); //calculate SHA1 hash
-                var sha1_hash1 = sha1_hash.toString()
-                //alert("Calculated SHA1:" + sha1_hash.toString()); //output result
-                $('#txt-script').attr('data-hash-script', sha1_hash1)
-            };
-            reader.readAsArrayBuffer(file); // read the file as ArrayBuffer
-        }
     </script>
 }

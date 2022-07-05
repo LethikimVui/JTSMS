@@ -13,6 +13,8 @@
     $('body').off('click', '#btn-select').on('click', '#btn-select', Select);
     $('body').off('click', '#test').on('click', '#test', Test);
 
+
+
     function Test() {
         var from = $('#txt-from').val().replaceAll('-', '/')
         var to = $('#txt-to').val().replaceAll('-', '/')
@@ -141,23 +143,9 @@
 
     }
 
-    //$('#frm-add-1').validate({
-    //    rules: {
-    //        customer: { required: true, },
-    //        station: { required: true, },
-    //        route: { required: true, },
-    //        assy: { required: true, },
-    //        rev: { required: true, },
-    //        type: { required: true, },
-    //        platform: { required: true, },
-    //    },
-    //    messages: {
-    //        station: { required: "dasda",},
-    //    }
-    //})
+   
 
     function Add() {
-        //if ($('#frm-add-1').valid()) {
 
         customer = parseInt($("#txt-customer").val());
         station = parseInt($("#txt-station").val());
@@ -175,7 +163,7 @@
             model.PlatformId = platform;
             model.AssemblyNumber = assy;
             model.AssemblyRevision = rev;
-            //model.ScriptId = null;
+          
             model.Description = $('#txt-description').val() ? $('#txt-description').val() : null;
             model.CreatedBy = user
             model.CreatedName = name
@@ -210,13 +198,7 @@
 
     function Delete() {
 
-        var model = new Object();
-        //model.CustId = parseInt($("#txt-customer-search").val());
-        //model.StationId = parseInt($("#txt-station-search").val());
-        //model.TypeId = parseInt($("#txt-type").val());
-        //model.PlatformId = parseInt($("#txt-platform").val());
-        //model.AssemblyNumber = $('#txt-assy').val() ? $('#txt-assy').val() : null;
-        //model.AssemblyRevision = $('#txt-rev').val() ? $('#txt-rev').val() : null;
+        var model = new Object();      
         model.ReqId = parseInt($(this).attr('data-reqid'));
         model.UpdatedBy = user;
         model.UpdatedName = name;
@@ -235,9 +217,7 @@
                 if (statusCode == 200) {
                     bootbox.alert(message, function () { Load(model); });
                 }
-                else if (statusCode == 409) {
-                    bootbox.alert(message);
-                }
+               
                 else {
                     bootbox.alert(message);
                 }
@@ -248,28 +228,19 @@
     $('#frm-submit').validate({
         rules: {
             scriptname: { required: true, },
-            scriptrev: { required: true, },
-            //firmware: { required: true, },
-            //firmwarerev: { required: true, },
+            scriptrev: { required: true, },        
             description: { required: true, },
             script: { required: true, },
             encrypted: { required: true, },
             PCNorDevNumber: { required: true, },
             changeDetail: { required: true, },
         },
-        //messages: {
-        //    scriptname: { required: "This field is required", },
-        //    scriptrev: { required: "This field is required", },
-        //    firmware: { required: "This field is required", },
-        //    firmwarerev: { required: "This field is required", },
-        //    //description: { required: "This field is required", },
-        //    script: { required: "This field is required", },
-        //    //encrypted: { required: "This field is required", },
-        //}
+       
     })
     function Submit() {
         if ($('#frm-submit').valid()) {
-
+           
+            debugger
 
             var getDate = new Date();
             var date = getDate.getFullYear().toString() + (getDate.getMonth() + 1) + getDate.getDate() + getDate.getHours() + getDate.getMinutes() + getDate.getSeconds() + getDate.getMilliseconds();
@@ -292,8 +263,10 @@
 
             var model = new Object();
             model.ReqId = parseInt($(this).attr('data-reid'));
+          
             model.TypeId = parseInt($(this).attr('data-typeid'));
             model.ScriptName = $("#txt-scriptname").val();
+            
             model.ScriptRev = $('#txt-scriptrev').val();
             model.PCNorDevNumber = $('#txt-PCNorDevNumber').val();
             model.ChangeDetail = $('#txt-changeDetail').val();
@@ -327,19 +300,24 @@
                         bootbox.alert(message);
                     }
                 }
-            })
+            });
 
-
-            uploadFile(script, name_script);
-            uploadFile(encrypted, name_encrypted);
+            var custName = $("#txt-custname").val();
+            var station = $("#txt-station").val();
+            var assembly = $("#txt-assembly").val();
+            uploadFile(script, name_script, 'origin', custName, station, assembly);
+            uploadFile(encrypted, name_encrypted, 'encrypted', custName, station, assembly);
         }
     }
-
-
-    function uploadFile(_file, _fileName) {
+  
+    function uploadFile(_file, _fileName, _type, _custName, _station, _assembly) {
         var form_data = new FormData();
         form_data.append("file", _file);
         form_data.append("fileName", _fileName);
+        form_data.append("type", _type);
+        form_data.append("custName", _custName);
+        form_data.append("station", _station);
+        form_data.append("assembly", _assembly);
         debugger
         $.ajax({
             type: 'post',

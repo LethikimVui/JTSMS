@@ -1,12 +1,14 @@
 ﻿using API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 using SharedObjects.Commons;
 using SharedObjects.StoredProcedures;
 using SharedObjects.ValueObjects;
 using SharedObjects.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,13 +24,20 @@ namespace API.Controllers
         {
             this.context = context;
         }
+        [HttpGet("JTSMS_ConnectionString")]
+        [Obsolete]
+        public async Task<string> JTSMS_ConnectionString()
+        {
+            var results = await context.Query<VScriptId>().AsNoTracking().FromSql(SPCommon.JTSMS_ConnectionString).ToListAsync();
+            return results[0].ScriptId;
+        }
         [HttpGet("Customer_get")]
         [Obsolete]
         public async Task<List<VCustomer>> Customer_get()
         {
             var results = await context.Query<VCustomer>().AsNoTracking().FromSql(SPCommon.Customer_get).ToListAsync();
             return results;
-        } 
+        }
         [HttpGet("Master_Route_get")]
         [Obsolete]
         public async Task<List<VRoute>> Master_Route_get()
@@ -49,13 +58,14 @@ namespace API.Controllers
         {
             var results = await context.Query<VType>().AsNoTracking().FromSql(SPCommon.Type_get).ToListAsync();
             return results;
-        } [HttpGet("Master_RouteStep_get")]
+        }
+        [HttpGet("Master_RouteStep_get")]
         [Obsolete]
         public async Task<List<VRouteStep>> Master_RouteStep_get()
         {
             var results = await context.Query<VRouteStep>().AsNoTracking().FromSql(SPCommon.Master_RouteStep_get).ToListAsync();
             return results;
-        } 
+        }
         [HttpGet("Access_UserRole_Get_By_ScriptId/{scriptId}")]
         [Obsolete]
         public async Task<List<VUserRole>> Access_UserRole_Get_By_ScriptId(string scriptId)

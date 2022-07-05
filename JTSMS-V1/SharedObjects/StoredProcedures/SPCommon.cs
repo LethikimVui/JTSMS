@@ -8,6 +8,7 @@ namespace SharedObjects.StoredProcedures
 {
     public class SPCommon
     {
+        public static string JTSMS_ConnectionString = "call usp_JTSMS_ConnectionString";
         public static string Customer_get = "call usp_Customer_get";
         public static string Station_get = "call usp_Station_get";
         public static string Type_get = "call usp_Type_get";

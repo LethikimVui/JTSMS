@@ -11,7 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JTSMS", "JTSMS\JTSMS.csproj", "{A787D6F9-09BC-4C6B-A935-5C0B2D48913E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Email_Deviation", "Email_Deviation\Email_Deviation.csproj", "{74E3D827-D8DD-464C-9DD9-CEDEC4AA5F1A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Email_Deviation_Triggering", "Email_Deviation\Email_Deviation_Triggering.csproj", "{74E3D827-D8DD-464C-9DD9-CEDEC4AA5F1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Email_Deviation_close", "Email_Deviation_close\Email_Deviation_close.csproj", "{346608F9-3B6C-478C-9995-BFAF92C7AECB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{74E3D827-D8DD-464C-9DD9-CEDEC4AA5F1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74E3D827-D8DD-464C-9DD9-CEDEC4AA5F1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74E3D827-D8DD-464C-9DD9-CEDEC4AA5F1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{346608F9-3B6C-478C-9995-BFAF92C7AECB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{346608F9-3B6C-478C-9995-BFAF92C7AECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{346608F9-3B6C-478C-9995-BFAF92C7AECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{346608F9-3B6C-478C-9995-BFAF92C7AECB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

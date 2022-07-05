@@ -12,6 +12,7 @@ namespace Email_Deviation
         public string reqId { get; set; }
         public string station { get; set; }
         public string platform { get; set; }
+        public int custId { get; set; }
         public string custName { get; set; }
         public string assemblyNumber { get; set; }
         public string assemblyRevision { get; set; }

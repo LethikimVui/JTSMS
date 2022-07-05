@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using SharedObjects.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace API.Models
 
 
         public virtual DbQuery<VCustomer> VCustomer { get; set; }
-        public virtual DbQuery<VScriptId> VCount { get; set; }
+        public virtual DbQuery<VScriptId> VScriptId { get; set; }
         public virtual DbQuery<VStation> VStation { get; set; }
         public virtual DbQuery<VDetail> VDetail { get; set; }
         public virtual DbQuery<VType> VType { get; set; }
@@ -41,12 +42,14 @@ namespace API.Models
         public virtual DbQuery<VConfig> VConfig { get; set; }
         public virtual DbQuery<VRouteStep> VRouteStep { get; set; }
 
+        [Obsolete]
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySQL("Data Source=vnhcmm0teapp03;Initial Catalog=jtestsms;User Id=hcm_vui_usr;Password=hcm_vui_usr;");
+                optionsBuilder.UseMySQL("Data Source=vnhcmm0teapp03;Initial Catalog=jtestsms;User Id=hcm_vui_usr;Password=hcm_vui_usr;")
+                    .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning)); ;
             }
         }
 
